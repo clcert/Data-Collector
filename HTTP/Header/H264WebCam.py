@@ -14,12 +14,12 @@ class H264WebCam(HttpProcess):
     re_expr = re.compile("^h264webcam", re.IGNORECASE)
 
     def process(self, data, metadata):
-        '''
+        """
         :param data: dict
         :param metadata: Metadata
         :return Metadata
-        '''
-        server = HttpProcess.getServer(data)
+        """
+        server = data['server']
         if server:
             if self.re_expr.search(server):
                 metadata.product = 'H264 WebCam'

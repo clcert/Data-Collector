@@ -16,7 +16,7 @@ class Companion(HttpProcess):
         :param data: dict
         :param metadata: Metadata
         '''
-        server = HttpProcess.getServer(data)
+        server = data['server']
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:

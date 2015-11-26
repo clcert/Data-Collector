@@ -17,7 +17,7 @@ class Barracuda(HttpProcess):
         :return Metadata
         '''
 
-        server = HttpProcess.getServer(data)
+        server = data['server']
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:

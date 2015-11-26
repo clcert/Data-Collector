@@ -17,7 +17,7 @@ class Httpd(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = HttpProcess.getServer(data)
+        server = data['server']
         if server:
             if self.re_expr.search(server):
                 metadata.product = 'Apache'

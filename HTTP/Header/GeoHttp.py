@@ -20,7 +20,7 @@ class GeoHttp(HttpProcess):
         :param metadata: Metadata
         :return metadata
         """
-        server = HttpProcess.getServer(data)
+        server = data['server']
         if server:
             if self.re_expr.search(server):
                 metadata.product = 'Geo Http Server'

@@ -15,7 +15,7 @@ class CameraWebServer(HttpProcess):
         :param data: dict
         :param metadata: Metadata
         """
-        server = HttpProcess.getServer(data)
+        server = data['server']
         if server:
             if self.re_expr.search(server):
                 metadata.product = 'Camera Web Server'

@@ -4,11 +4,11 @@ from HTTP.HttpProcess import HttpProcess
 __author__ = 'eduardo'
 
 
-class OracleApplicationServer(HttpProcess):
+class DlinkSerieDIR(HttpProcess):
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
-    re_expr = re.compile("^oracle[-\s]?application[-\s]?server[-\s]?(?P<version>[/\w\.]+)?", re.IGNORECASE)
+    re_expr = re.compile("^linux,\s?http/([\d\.]+)?,\s?(?P<product>dir-[\w\+]+)\s?ver", re.IGNORECASE)
 
     def process(self, data, metadata):
         """
@@ -20,6 +20,7 @@ class OracleApplicationServer(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Oracle Application Server'
-                metadata.version = match_obj.group('version')
+                metadata.manufacturer = 'Dlink'
+                metadata.product = match_obj.group('product')
+                metadata.device_type = 'Router'
         return metadata
