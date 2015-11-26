@@ -1,0 +1,45 @@
+# Server Parsed
+- AcIDSoftWebServer
+- AkamaiGHost
+- Alphapd
+- Apache 
+- Boa
+- Camera Web Server
+- Cisco-IOS (router and switch)
+- Companion Web Server
+- Cross Web Server
+- DVRDVS-Webs (IP Cameras)
+- Gemtek
+- GeoHttpServer (IP Cameras, access control)
+- GoAheadWebs
+- GWS
+- Hikvision Webs
+- HP HTTP Server (printers)
+- Httpd
+- IP SHARER WEB
+- JAWS
+- Lighttpd
+- Micro Httpd
+- Microsoft Http API
+- Microsoft IIS
+- Mini Httpd
+- NetShar-WebServer
+- Netwave IP Camera
+- Nginx
+- RomPager
+- Router Webserver
+- SonicWALL (firewall)
+- Squid
+- Swift (I don't know)
+- Switch
+- Thttpd
+- UC https
+- Virata-EmWeb
+- WCY Web Server
+- wg_httpd
+
+
+- BigIP
+- GlassFish
+- debut
+- 
