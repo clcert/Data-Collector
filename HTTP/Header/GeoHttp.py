@@ -23,8 +23,10 @@ class GeoHttp(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'Geo Http Server'
-                metadata.device_type = 'Camera' # TODO segun la pagina web
+                metadata.service.manufacturer = 'GeoVision'
+                metadata.service.product = 'Geo Http Server'
+                metadata.device.manufacturer = 'GeoVision'
+                metadata.device_type = 'Camera'
         return metadata
 
 

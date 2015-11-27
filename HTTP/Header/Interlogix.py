@@ -22,6 +22,7 @@ class Interlogix(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'Interlogix Web'
-                metadata.device_type = 'Camera'
+                metadata.service.product = 'Interlogix Web'
+                metadata.device.manufacturer = 'Interlogix'
+                metadata.device.type = 'Camera'
         return metadata

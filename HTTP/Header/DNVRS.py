@@ -21,6 +21,7 @@ class DNVRS(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'DNVRS Web'
+                metadata.service.product = 'DNVRS Web'
+                metadata.device.type = 'Camera'
         return metadata
 

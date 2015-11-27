@@ -5,6 +5,9 @@ __author__ = 'eduardo'
 
 
 class SonicWall(HttpProcess):
+    """
+    www.sonicwall.com/
+    """
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -19,6 +22,7 @@ class SonicWall(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'SonicWall'
-                metadata.device_type = 'Firewall'
+                metadata.service.manufacturer = 'Dell'
+                metadata.service.product = 'SonicWall'
+                metadata.device.type = 'Firewall'
         return metadata

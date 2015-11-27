@@ -23,7 +23,6 @@ class Lighttpd(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Lighttpd'
-                metadata.version = match_obj.group('version')
-                metadata.os = match_obj.group('os')
+                metadata.service.product = 'Lighttpd'
+                metadata.service.version = match_obj.group('version')
         return metadata

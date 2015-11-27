@@ -23,7 +23,8 @@ class MicrosoftIIS(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Microsoft-IIS'
-                metadata.version = match_obj.group('version')
-                metadata.os = 'Windows'
+                metadata.service.manufacturer = 'Microsoft'
+                metadata.service.product = 'IIS'
+                metadata.service.version = match_obj.group('version')
+                metadata.device.os = 'Windows'
         return metadata

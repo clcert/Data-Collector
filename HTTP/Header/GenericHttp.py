@@ -20,6 +20,6 @@ class GenericHttp(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Http Server'
-                metadata.version = match_obj.group('version')
+                metadata.service.product = 'Http Server'
+                metadata.service.version = match_obj.group('version')
         return metadata

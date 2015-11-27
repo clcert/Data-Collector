@@ -23,7 +23,8 @@ class GoAheadWebs(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'GoAhead Web Server'
-                metadata.version = match_obj.group('version')
-                metadata.device_type = 'Embedded'
+                metadata.service.manufacturer = 'Embedthis'
+                metadata.service.product = 'GoAhead Web Server'
+                metadata.service.version = match_obj.group('version')
+                metadata.device.type = 'Embedded'
         return metadata

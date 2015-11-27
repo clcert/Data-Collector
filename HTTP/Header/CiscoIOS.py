@@ -18,6 +18,7 @@ class CiscoIOS(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'Cisco IOS'
-                metadata.device_type = 'Router'
+                metadata.service.manufacturer = 'Cisco'
+                metadata.service.product = 'IOS'
+                metadata.device.type = 'Router'
         return metadata

@@ -23,6 +23,7 @@ class EmbedthisAppweb(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Appweb Web Server'
-                metadata.device_type = 'Embedded'
+                metadata.service.manufacturer = 'Embedthis'
+                metadata.service.product = 'Appweb Web Server'
+                metadata.device.type = 'Embedded'
         return metadata

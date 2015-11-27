@@ -5,6 +5,9 @@ __author__ = 'eduardo'
 
 
 class ReeCam(HttpProcess):
+    """
+    http://www.reecam.net/en/
+    """
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -20,6 +23,7 @@ class ReeCam(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'ReeCam Ip Camera'
-                metadata.device_type = 'Camera'
+                metadata.device.manufacturer = 'ReeCam'
+                metadata.device.product = 'Ip Camera'
+                metadata.device.type = 'Camera'
         return metadata

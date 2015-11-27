@@ -1,5 +1,6 @@
 import re
 from HTTP.HttpProcess import HttpProcess
+from HTTP.Metadata import Metadata
 
 __author__ = 'eduardo'
 
@@ -20,5 +21,6 @@ class AkamaiGHost(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'AkamaiGHost'
+                metadata.service.manufacturer = 'Akamai'
+                metadata.service.product = 'GHost'
         return metadata

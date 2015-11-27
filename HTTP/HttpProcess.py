@@ -32,7 +32,7 @@ class HttpProcess(object):
             if 'Content-type' in header:
                 data['content-type'] = ' '.join(data['header']['Content-type'])
             if 'WWW-Authenticate' in header:
-                data['www-authenticate'] = ' '.join(data['header']['www-authenticate'])
+                data['www-authenticate'] = ' '.join(data['header']['WWW-Authenticate'])
         return data
 
     @classmethod

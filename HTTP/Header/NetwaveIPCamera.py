@@ -20,6 +20,6 @@ class NetwaveIPCamera(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'Netwave IP Camera'
-                metadata.device_type = 'Camera'
+                metadata.device.product = 'Netwave IP Camera'
+                metadata.device.type = 'Camera'
         return metadata

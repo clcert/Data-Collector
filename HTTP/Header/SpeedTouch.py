@@ -5,6 +5,9 @@ __author__ = 'eduardo'
 
 
 class SpeedTouch(HttpProcess):
+    """
+    https://support.zen.co.uk/kb/Knowledgebase/ThomsonSpeedTouch-585780WL-Wireless-Setup
+    """
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -20,6 +23,10 @@ class SpeedTouch(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Speed Touch'
-                metadata.version = match_obj.group('version')
+                metadata.service.manufacturer = 'Thomson'
+                metadata.service.product = 'Speed Touch Web Server'
+                metadata.service.version = match_obj.group('version')
+                metadata.device.manufacturer = 'Thomson'
+                metadata.device.product = 'Speed Touch'
+                metadata.device.type = 'Router'
         return metadata   

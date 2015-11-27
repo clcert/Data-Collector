@@ -22,5 +22,6 @@ class MicroHttpd(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'Micro Httpd'
+                metadata.service.manufacturer = 'ACME'
+                metadata.service.product = 'Micro Httpd'
         return metadata

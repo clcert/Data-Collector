@@ -22,6 +22,7 @@ class Gemtek(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Gemtek'
-                metadata.version = match_obj.group('version')
+                metadata.service.product = 'Gemtek'
+                metadata.service.version = match_obj.group('version')
+                metadata.device.manufacturer = 'Gemtek'
         return metadata

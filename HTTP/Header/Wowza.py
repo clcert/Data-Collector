@@ -5,6 +5,9 @@ __author__ = 'eduardo'
 
 
 class Wowza(HttpProcess):
+    """
+    https://www.wowza.com/products/streaming-engine
+    """
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -20,6 +23,7 @@ class Wowza(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Wowza Streaming Engine'
-                metadata.version = match_obj.group('version')
+                metadata.service.manufacturer = 'Wowza'
+                metadata.service.product = 'Streaming Engine'
+                metadata.service.version = match_obj.group('version')
         return metadata

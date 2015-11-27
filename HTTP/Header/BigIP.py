@@ -20,5 +20,6 @@ class BigIP(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'BigIP'
+                metadata.service.manufacturer = 'F5'
+                metadata.service.product = 'BigIP'
         return metadata

@@ -4,7 +4,7 @@ from HTTP.HttpProcess import HttpProcess
 __author__ = 'eduardo'
 
 
-class LotusDomino(HttpProcess):
+class LotusDomino(HttpProcess):#TODO remove don't add new information
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -20,5 +20,5 @@ class LotusDomino(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Lotus Domino'
+                metadata.service.product = 'Lotus Domino'
         return metadata   

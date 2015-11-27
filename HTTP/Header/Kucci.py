@@ -4,7 +4,7 @@ from HTTP.HttpProcess import HttpProcess
 __author__ = 'eduardo'
 
 
-class Kucci(HttpProcess):
+class Kucci(HttpProcess):# Todo remove don't add new information
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -19,5 +19,5 @@ class Kucci(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'Kucci'
+                metadata.service.product = 'Kucci'
         return metadata

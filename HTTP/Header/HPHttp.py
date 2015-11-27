@@ -20,6 +20,8 @@ class HPHttp(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'HP HTTP Server'
-                metadata.device_type = 'Printer'
+                metadata.service.manufacturer = 'HP'
+                metadata.service.product = 'HP HTTP Server'
+                metadata.device.manufacturer = 'HP'
+                metadata.device.type = 'Printer'
         return metadata

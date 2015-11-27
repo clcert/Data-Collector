@@ -23,6 +23,7 @@ class GlassFish(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'GlassFish Server'
-                metadata.version = match_obj.group('version')
+                metadata.service.manufacturer = 'Oracle'
+                metadata.service.product = 'GlassFish Server'
+                metadata.service.version = match_obj.group('version')
         return metadata

@@ -9,7 +9,7 @@ class Switch(HttpProcess):
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
-    re_expr = re.compile("^switch", re.IGNORECASE)
+    re_expr = re.compile("^switch", re.IGNORECASE)# TODO remove don't add new infoemation
 
     def process(self, data, metadata):
         """
@@ -20,5 +20,5 @@ class Switch(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'Switch'
+                metadata.service.product = 'Switch'
         return metadata

@@ -23,5 +23,5 @@ class DcsLighttpd(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Lighttpd'
+                metadata.service.product = 'Lighttpd'
         return metadata   

@@ -19,5 +19,5 @@ class GenericRouter(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.device_type = 'Router'
+                metadata.device.type = 'Router'
         return metadata

@@ -20,5 +20,6 @@ class Gws(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'Google Web Server'
+                metadata.service.manufacturer = 'Google'
+                metadata.service.product = 'Web Server'
         return metadata

@@ -20,6 +20,8 @@ class HPILO(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'HP Integrated Lights Out Server'
-                metadata.version = match_obj.group('version')
+                metadata.service.manufacturer = 'HP'
+                metadata.service.product = 'HP Integrated Lights Out Server'
+                metadata.service.version = match_obj.group('version')
+                metadata.device.manufacturer = 'HP'
         return metadata

@@ -20,6 +20,6 @@ class VirataEmWeb(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Virata EmWeb'
-                metadata.product = match_obj.group('version')
+                metadata.service.product = 'Virata EmWeb'
+                metadata.service.version = match_obj.group('version')
         return metadata

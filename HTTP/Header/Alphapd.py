@@ -4,8 +4,7 @@ from HTTP.HttpProcess import HttpProcess
 __author__ = 'eduardo'
 
 
-class Alphapd(HttpProcess):
-
+class Alphapd(HttpProcess):# TODO Remove class not add new information
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -20,5 +19,5 @@ class Alphapd(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'Alphapd'
+                metadata.service.product = 'Alphapd'
         return metadata

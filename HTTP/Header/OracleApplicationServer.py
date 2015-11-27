@@ -20,6 +20,7 @@ class OracleApplicationServer(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Oracle Application Server'
-                metadata.version = match_obj.group('version')
+                metadata.service.manufacturer = 'Oracel'
+                metadata.service.product = 'Application Server'
+                metadata.service.version = match_obj.group('version')
         return metadata

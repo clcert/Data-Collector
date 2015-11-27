@@ -5,6 +5,9 @@ __author__ = 'eduardo'
 
 
 class Barracuda(HttpProcess):
+    """
+    https://barracudaserver.com/
+    """
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -21,6 +24,7 @@ class Barracuda(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Barracuda Server'
-                metadata.os = match_obj.group('os')
+                metadata.service.manufacturer = 'Barracuda'
+                metadata.service.product = 'Web Server'
+                metadata.device.os = match_obj.group('os')
         return metadata

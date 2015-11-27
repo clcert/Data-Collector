@@ -5,6 +5,11 @@ __author__ = 'eduardo'
 
 
 class DlinkSerieDIR(HttpProcess):
+    """
+    http://www.dlinkla.com/dir-850l
+    http://www.dlinkla.com/dir-610n-plus
+    http://www.dlinkla.com/dir-868l
+    """
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -20,7 +25,7 @@ class DlinkSerieDIR(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.manufacturer = 'Dlink'
-                metadata.product = match_obj.group('product')
-                metadata.device_type = 'Router'
+                metadata.device.manufacturer = 'Dlink'
+                metadata.device.product = match_obj.group('product')
+                metadata.device.type = 'Router'
         return metadata

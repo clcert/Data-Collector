@@ -5,6 +5,9 @@ __author__ = 'eduardo'
 
 
 class IbmHttpServer(HttpProcess):
+    """
+    http://www-03.ibm.com/software/products/es/http-servers
+    """
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -19,5 +22,6 @@ class IbmHttpServer(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'IBM HTTP Server'
+                metadata.service.manufacturer = 'IBM'
+                metadata.service.product = 'HTTP Server'
         return metadata

@@ -5,6 +5,9 @@ __author__ = 'eduardo'
 
 
 class Com3(HttpProcess):
+    """
+    https://es.wikipedia.org/wiki/3Com
+    """
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -20,7 +23,7 @@ class Com3(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = '3Com'
-                metadata.version = match_obj.group('version')
-                metadata.device_type = 'Router'
+                metadata.device.manufacturer = '3Com'
+                # metadata.service.version = match_obj.group('version')
+                metadata.device.type = 'Router'
         return metadata

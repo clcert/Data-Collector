@@ -20,7 +20,7 @@ class EmbeddedHttp(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Embedded Http Server'
-                metadata.version = match_obj.group('version')
-                metadata.device_type = 'Embedded'
+                metadata.service.product = 'Embedded Http Server'
+                metadata.service.version = match_obj.group('version')
+                metadata.device.type = 'Embedded'
         return metadata

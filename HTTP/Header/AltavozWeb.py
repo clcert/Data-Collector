@@ -19,5 +19,5 @@ class AltavozWeb(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'Altavoz Web Server'
+                metadata.service.product = 'Altavoz Web Server'
         return metadata

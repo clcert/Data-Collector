@@ -19,6 +19,6 @@ class DVRDVS(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'DVRDVS Webs'
-                metadata.device_type = 'Camera'
+                metadata.service.product = 'DVRDVS Webs'
+                metadata.device.type = 'Camera'
         return metadata

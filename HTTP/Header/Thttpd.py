@@ -5,6 +5,9 @@ __author__ = 'eduardo'
 
 
 class Thttpd(HttpProcess):
+    """
+    http://acme.com/software/thttpd/
+    """
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -20,6 +23,7 @@ class Thttpd(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'thttpd'
-                metadata.version = match_obj.group('version')
+                metadata.service.manufacturer = 'ACME'
+                metadata.service.product = 'thttpd'
+                metadata.service.version = match_obj.group('version')
         return metadata

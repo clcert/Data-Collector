@@ -20,7 +20,8 @@ class Apache(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Apache'
-                metadata.version = match_obj.group('version')
-                metadata.os = match_obj.group('os')
+                metadata.service.manufacturer = 'Apache'
+                metadata.service.product = 'httpd'
+                metadata.service.version = match_obj.group('version')
+                metadata.device.os = match_obj.group('os')
         return metadata

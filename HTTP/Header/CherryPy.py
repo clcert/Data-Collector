@@ -23,6 +23,7 @@ class CherryPy(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'CherryPy'
-                metadata.version = match_obj.group('version')
+                metadata.service.manufacturer = 'CherryPy'
+                metadata.service.product = 'CherryPy'
+                metadata.service.version = match_obj.group('version')
         return metadata   

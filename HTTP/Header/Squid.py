@@ -5,6 +5,9 @@ __author__ = 'eduardo'
 
 
 class Squid(HttpProcess):
+    """
+    http://www.squid-cache.org/
+    """
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -20,7 +23,7 @@ class Squid(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Squid'
-                metadata.version = match_obj.group('version')
-                metadata.os = match_obj.group('os')
+                metadata.service.product = 'Squid'
+                metadata.service.version = match_obj.group('version')
+                metadata.device.os = match_obj.group('os')
         return metadata

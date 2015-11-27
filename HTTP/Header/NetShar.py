@@ -20,6 +20,6 @@ class NetShar(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'NetShar WebServer'
-                metadata.version = match_obj.group('version')
+                metadata.service.product = 'NetShar WebServer'
+                metadata.service.version = match_obj.group('version')
         return metadata

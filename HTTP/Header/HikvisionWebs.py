@@ -23,6 +23,8 @@ class HikvisionWebs(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'Hikvision Webs'
-                metadata.device_type = 'Camera'
+                metadata.service.manufacturer = 'Hikvision'
+                metadata.service.product = 'Hikvision Webs'
+                metadata.device.manufacturer = 'Hikvision'
+                metadata.device.type = 'Camera'
         return metadata

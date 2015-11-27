@@ -19,7 +19,7 @@ class Debut(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Debut'
-                metadata.version = match_obj.group('version')
-                metadata.device_type = 'Printer' # TODO Puede ser una impresora brother
+                metadata.service.product = 'Debut'
+                metadata.service.version = match_obj.group('version')
+                metadata.device.type = 'Printer' # TODO Puede ser una impresora brother
         return metadata

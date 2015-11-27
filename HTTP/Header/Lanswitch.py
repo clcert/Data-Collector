@@ -20,6 +20,6 @@ class Lanswitch(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Lanswitch'
-                metadata.device_type = 'Switch'
+                metadata.service.product = 'Lanswitch'
+                metadata.device.type = 'Switch'
         return metadata

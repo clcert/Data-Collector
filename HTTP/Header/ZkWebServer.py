@@ -4,7 +4,7 @@ from HTTP.HttpProcess import HttpProcess
 __author__ = 'eduardo'
 
 
-class ZKWebServer(HttpProcess):
+class ZKWebServer(HttpProcess):# TODO remove don't add new information
     """
     https://en.wikipedia.org/wiki/ZK_%28framework%29
     """
@@ -22,5 +22,5 @@ class ZKWebServer(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'ZK Web Server'
+                metadata.service.product = 'ZK Web Server'
         return metadata

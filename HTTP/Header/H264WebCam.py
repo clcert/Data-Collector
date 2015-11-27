@@ -22,6 +22,7 @@ class H264WebCam(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'H264 WebCam'
-                metadata.device_type = 'Camera'
+                metadata.service.manufacturer = 'Timhillone'
+                metadata.service.product = 'H264 WebCam'
+                metadata.device.type = 'Camera'
         return metadata   

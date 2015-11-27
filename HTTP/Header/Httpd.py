@@ -20,5 +20,6 @@ class Httpd(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'Apache'
+                metadata.service.manufacturer = 'Apache'
+                metadata.service.product = 'httpd'
         return metadata

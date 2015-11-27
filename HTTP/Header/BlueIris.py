@@ -1,0 +1,28 @@
+import re
+from HTTP.HttpProcess import HttpProcess
+
+__author__ = 'eduardo'
+
+
+class BlueIris(HttpProcess):
+    """
+    http://blueirissoftware.com/
+    """
+    protocol = 'HTTP'
+    subprotocol = 'HEADER'
+
+    re_expr = re.compile("^blueiris-?http/?([\d\.]+)", re.IGNORECASE)
+
+    def process(self, data, metadata):
+        """
+        :param data: dict
+        :param metadata: Metadata
+        :return Metadata
+        """
+        server = data['server']
+        if server:
+            if self.re_expr.search(server):
+                metadata.service.manufacturer = 'Blue Iris'
+                metadata.service.product = 'Blue Iris Video Security'
+                metadata.device.type = 'Camera'
+        return metadata

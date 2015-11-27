@@ -23,6 +23,6 @@ class IPSharereWeb(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'IP Sharer Web'
-                metadata.version = match_obj.group('version')
+                metadata.service.product = 'IP Sharer Web'
+                metadata.service.version = match_obj.group('version')
         return metadata

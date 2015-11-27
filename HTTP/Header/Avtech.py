@@ -5,6 +5,9 @@ __author__ = 'eduardo'
 
 
 class Avtech(HttpProcess):
+    """
+    http://www.avtech.com.tw/
+    """
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -20,10 +23,9 @@ class Avtech(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'Avtech'
-                metadata.version = match_obj.group('version')
-                metadata.os = 'Linux'
-                metadata.os_version = match_obj.group('os_version')
-                metadata.device_type = 'Camera'
+                metadata.device.manufacturer = 'Avtech'
+                metadata.device.os = 'Linux'
+                metadata.device.os_version = match_obj.group('os_version')
+                metadata.device.type = 'Camera'
         return metadata
 

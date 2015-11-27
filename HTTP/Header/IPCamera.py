@@ -20,7 +20,7 @@ class IPCamera(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = ' IP Camera Web'
-                metadata.version = match_obj.group('version')
-                metadata.device_type = 'Camera'
+                metadata.service.product = 'IP Camera Web'
+                metadata.service.version = match_obj.group('version')
+                metadata.device.type = 'Camera'
         return metadata

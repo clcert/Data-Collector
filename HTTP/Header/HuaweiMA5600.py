@@ -23,6 +23,7 @@ class HuaweiMA5600(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'Huawei'
-                metadata.device_type = 'MA5600'
+                metadata.device.manufacturer = 'Huawei'
+                metadata.device.product = 'MA5600'
+                metadata.device.type = 'IP broadband access device'
         return metadata

@@ -18,6 +18,6 @@ class CameraWebServer(HttpProcess):
         server = data['server']
         if server:
             if self.re_expr.search(server):
-                metadata.product = 'Camera Web Server'
-                metadata.device_type = 'Camera'
+                metadata.service.product = 'Camera Web Server'
+                metadata.device.type = 'Camera'
         return metadata

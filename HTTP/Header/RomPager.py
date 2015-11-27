@@ -20,6 +20,7 @@ class RomPager(HttpProcess):
         if server:
             match_obj = self.re_expr.search(server)
             if match_obj:
-                metadata.product = 'RomPager'
-                metadata.version = match_obj.group('version')
+                metadata.service.manufacturer = 'Allegro'
+                metadata.service.product = 'RomPager'
+                metadata.service.version = match_obj.group('version')
         return metadata
