@@ -7,6 +7,7 @@ from ExternalData.ReverseDNS import reverse_dns
 from ExternalData.Whois import whois
 from HTTP.HttpProcess import HttpProcess
 from HTTP.Metadata import Metadata
+from HTTP.Header import *
 
 
 def argument_parser():
@@ -34,7 +35,7 @@ if __name__ == '__main__':
 
         if args.dns_reverse:
             reverse = reverse_dns(data['ip'])
-            if reverse  != 'None':
+            if reverse != 'None':
                 data['dns-reverse'] = reverse
 
         if args.whois:
@@ -49,12 +50,9 @@ if __name__ == '__main__':
                 meta = Metadata()
 
                 for sub in subclasses:
-                        meta = sub().process(data, meta)
+                    meta = sub().process(data, meta)
 
                 if not meta.is_empty():
-                    data['metadata'] = meta
+                    data['metadata'] = meta.to_dict()
 
-        # print json.dumps(data)
         output.write(json.dumps(data)+'\n')
-
-

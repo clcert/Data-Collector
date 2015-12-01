@@ -13,6 +13,12 @@ class ServiceMetadata(object):
     def is_empty(self):
         return not (self.manufacturer or self.product or self.version)
 
+    def to_dict(self):
+        if self.is_empty():
+            return None
+        return dict((k, v) for k, v in self.__dict__.iteritems() if v)
+        # return json.dumps(data_cleaned)
+
 
 class DeviceMetadata(object):
 
@@ -25,6 +31,13 @@ class DeviceMetadata(object):
 
     def is_empty(self):
         return not (self.manufacturer or self.product or self.os or self.os_version or self.type)
+
+    def to_dict(self):
+        if self.is_empty():
+            return None
+        return dict((k, v) for k, v in self.__dict__.iteritems() if v)
+        # return json.dumps(data_cleaned)
+
 
 class Metadata(object):
     """
@@ -42,7 +55,9 @@ class Metadata(object):
         """
         return self.service.is_empty() and self.device.is_empty()
 
-    def to_json(self):
-        data_cleaned = dict((k, v) for k, v in self.__dict__.iteritems() if v)
-        return json.dumps(data_cleaned)
+    def to_dict(self):
+        return {'service': self.service.to_dict(), 'device': self.device.to_dict()}
+        # data_cleaned = self.service.to_dict()
+        # data_cleaned.update(self.device.to_dict())
+        # return json.dumps({'service': self.service.to_json(), 'device': self.device.to_json()})
 
