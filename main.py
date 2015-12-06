@@ -1,6 +1,7 @@
 import argparse
 import json
 
+import sys
 from datetime import date
 
 from ExternalData.ReverseDNS import reverse_dns
@@ -8,16 +9,18 @@ from ExternalData.Whois import whois
 from HTTP.HttpProcess import HttpProcess
 from HTTP.Metadata import Metadata
 from HTTP.Header import *
+from ZmapLog import ZmapLog
 
 
 def argument_parser():
     parser = argparse.ArgumentParser(description='Recollect IP data')
     parser.add_argument('-i', '--input', help='Input file name', required=True)
-    parser.add_argument('-o', '--output', help='Output file name', required=True)
+    parser.add_argument('-o', '--output', help='Output file name', required=False)
     parser.add_argument('--date', help='Add the date of scan (input format dd/mm/yyyy)', required=False)
     parser.add_argument('--whois', help='Set whois ip response', action='store_true', required=False)
     parser.add_argument('--dns_reverse', help='Set the machine name', action='store_true', required=False)
     parser.add_argument('--http', help='Parse http info', action='store_true', required=False)
+    parser.add_argument('--zmap_log', help='Parse Zmap log', action='store_true', required=False)
     return parser.parse_args()
 
 
@@ -25,6 +28,12 @@ if __name__ == '__main__':
     args = argument_parser()
     input = open(args.input, 'r')
     output = open(args.output, 'w')
+
+    if args.zmap_log:
+        log = ZmapLog()
+        log.process_log(input)
+        print json.dumps(log.to_dict())
+        sys.exit(1)
 
     for line in input:
         data = json.loads(line)
