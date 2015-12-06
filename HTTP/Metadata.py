@@ -17,7 +17,6 @@ class ServiceMetadata(object):
         if self.is_empty():
             return None
         return dict((k, v) for k, v in self.__dict__.iteritems() if v)
-        # return json.dumps(data_cleaned)
 
 
 class DeviceMetadata(object):
@@ -36,7 +35,6 @@ class DeviceMetadata(object):
         if self.is_empty():
             return None
         return dict((k, v) for k, v in self.__dict__.iteritems() if v)
-        # return json.dumps(data_cleaned)
 
 
 class Metadata(object):
@@ -57,7 +55,3 @@ class Metadata(object):
 
     def to_dict(self):
         return {'service': self.service.to_dict(), 'device': self.device.to_dict()}
-        # data_cleaned = self.service.to_dict()
-        # data_cleaned.update(self.device.to_dict())
-        # return json.dumps({'service': self.service.to_json(), 'device': self.device.to_json()})
-
