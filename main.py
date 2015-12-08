@@ -1,26 +1,31 @@
 import argparse
 import json
-
 import sys
+
 from datetime import date
 
+from Clean.CleanErrors import clean_json
+from Clean.NormalizeHttp import normalize_http
+from Logs.ZmapLog import ZmapLog
 from ExternalData.ReverseDNS import reverse_dns
 from ExternalData.Whois import whois
 from HTTP.HttpProcess import HttpProcess
 from HTTP.Metadata import Metadata
 from HTTP.Header import *
-from ZmapLog import ZmapLog
 
 
 def argument_parser():
     parser = argparse.ArgumentParser(description='Recollect IP data')
     parser.add_argument('-i', '--input', help='Input file name', required=True)
     parser.add_argument('-o', '--output', help='Output file name', required=False)
+    parser.add_argument('--port', help='Set the scanned port', required=False)
     parser.add_argument('--date', help='Add the date of scan (input format dd/mm/yyyy)', required=False)
     parser.add_argument('--whois', help='Set whois ip response', action='store_true', required=False)
     parser.add_argument('--dns_reverse', help='Set the machine name', action='store_true', required=False)
     parser.add_argument('--http', help='Parse http info', action='store_true', required=False)
     parser.add_argument('--zmap_log', help='Parse Zmap log', action='store_true', required=False)
+    parser.add_argument('--clean_errors', help='Clean the lines with only error an ip fields', action='store_true', required=False)
+    parser.add_argument('--normalize_http', help='Normalize old scans fields', action='store_true', required=False)
     return parser.parse_args()
 
 
@@ -29,18 +34,33 @@ if __name__ == '__main__':
     input = open(args.input, 'r')
     output = open(args.output, 'w')
 
-    if args.zmap_log:
+    if args.date and args.date.count('/') == 2:
+        day, month, year = args.date.split('/')
+        date = str(date(int(year), int(month), int(day)))
+    elif args.date:
+        sys.exit(1)
+
+    if args.zmap_log and args.port and args.date:
         log = ZmapLog()
         log.process_log(input)
-        print json.dumps(log.to_dict())
+        log_dict = log.to_dict()
+        log_dict['port'] = args.port
+        log_dict['date'] = date
+
+        output.write(json.dumps(log_dict))
         sys.exit(1)
 
     for line in input:
         data = json.loads(line)
 
-        if args.date and args.date.count('/') == 2:
-            day, month, year = args.date.split('/')
-            data['date'] = str(date(int(year), int(month), int(day)))
+        if args.normalize_http:
+            data = normalize_http(data)
+
+        if args.clean_errors and clean_json(data):
+            continue
+
+        if args.date:
+            data['date'] = date
 
         if args.dns_reverse:
             reverse = reverse_dns(data['ip'])
