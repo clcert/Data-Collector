@@ -4,6 +4,7 @@ import sys
 
 from datetime import date
 
+from Certificates.validate import verify_cert
 from Clean.CleanErrors import clean_json
 from Clean.NormalizeHttp import normalize_http
 from Logs.ZmapLog import ZmapLog
@@ -23,9 +24,10 @@ def argument_parser():
     parser.add_argument('--whois', help='Set whois ip response', action='store_true', required=False)
     parser.add_argument('--dns_reverse', help='Set the machine name', action='store_true', required=False)
     parser.add_argument('--http', help='Parse http info', action='store_true', required=False)
-    parser.add_argument('--zmap_log', help='Parse Zmap log', action='store_true', required=False)
-    parser.add_argument('--clean_errors', help='Clean the lines with only error an ip fields', action='store_true', required=False)
     parser.add_argument('--normalize_http', help='Normalize old scans fields', action='store_true', required=False)
+    parser.add_argument('--validate_cert', help='Validate server certificate', action='store_true', required=False)
+    parser.add_argument('--clean_errors', help='Clean the lines with only error an ip fields', action='store_true', required=False)
+    parser.add_argument('--zmap_log', help='Parse Zmap log', action='store_true', required=False)
     return parser.parse_args()
 
 
@@ -83,5 +85,8 @@ if __name__ == '__main__':
 
                 if not meta.is_empty():
                     data['metadata'] = meta.to_dict()
+
+        if args.validate_cert and 'chain' in data:
+            data['valid'] = verify_cert(data)
 
         output.write(json.dumps(data)+'\n')
