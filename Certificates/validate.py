@@ -1,4 +1,3 @@
-import json
 import textwrap
 from subprocess import check_output, CalledProcessError
 
