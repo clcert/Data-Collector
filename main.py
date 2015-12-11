@@ -6,6 +6,7 @@ from datetime import date
 
 from Certificates.validate import verify_cert
 from Clean.CleanErrors import clean_json
+from Clean.NormalizeCert import normalize_cert
 from Clean.NormalizeHttp import normalize_http
 from Logs.ZmapLog import ZmapLog
 from ExternalData.ReverseDNS import reverse_dns
@@ -24,7 +25,8 @@ def argument_parser():
     parser.add_argument('--whois', help='Set whois ip response', action='store_true', required=False)
     parser.add_argument('--dns_reverse', help='Set the machine name', action='store_true', required=False)
     parser.add_argument('--http', help='Parse http info', action='store_true', required=False)
-    parser.add_argument('--normalize_http', help='Normalize old scans fields', action='store_true', required=False)
+    parser.add_argument('--normalize_http', help='Normalize old http scans fields', action='store_true', required=False)
+    parser.add_argument('--normalize_cert', help='Normalize old certificate scans fields', action='store_true', required=False)
     parser.add_argument('--validate_cert', help='Validate server certificate', action='store_true', required=False)
     parser.add_argument('--clean_errors', help='Clean the lines with only error an ip fields', action='store_true', required=False)
     parser.add_argument('--zmap_log', help='Parse Zmap log', action='store_true', required=False)
@@ -57,6 +59,9 @@ if __name__ == '__main__':
 
         if args.normalize_http:
             data = normalize_http(data)
+
+        if args.normalize_cert:
+            data = normalize_cert(data)
 
         if args.clean_errors and clean_json(data):
             continue
