@@ -4,6 +4,7 @@ import sys
 
 from datetime import date
 
+from Certificates.Https import expose_self_cert_info
 from Certificates.validate import verify_cert
 from Clean.CleanErrors import clean_json
 from Clean.NormalizeCert import normalize_cert
@@ -25,6 +26,7 @@ def argument_parser():
     parser.add_argument('--whois', help='Set whois ip response', action='store_true', required=False)
     parser.add_argument('--dns_reverse', help='Set the machine name', action='store_true', required=False)
     parser.add_argument('--http', help='Parse http info', action='store_true', required=False)
+    parser.add_argument('--https', help='Parse https info', action='store_true', required=False)
     parser.add_argument('--normalize_http', help='Normalize old http scans fields', action='store_true', required=False)
     parser.add_argument('--normalize_cert', help='Normalize old certificate scans fields', action='store_true', required=False)
     parser.add_argument('--validate_cert', help='Validate server certificate', action='store_true', required=False)
@@ -37,6 +39,7 @@ if __name__ == '__main__':
     args = argument_parser()
     input = open(args.input, 'r')
     output = open(args.output, 'w')
+    count = 0
 
     if args.date and args.date.count('/') == 2:
         day, month, year = args.date.split('/')
@@ -55,6 +58,10 @@ if __name__ == '__main__':
         sys.exit(1)
 
     for line in input:
+        count += 1
+        if count % 1000 == 0:
+            print count
+
         data = json.loads(line)
 
         if args.normalize_http:
@@ -92,6 +99,9 @@ if __name__ == '__main__':
                     data['metadata'] = meta.to_dict()
 
         if args.validate_cert and 'chain' in data:
-            data['valid'] = verify_cert(data)
+            data['validate'] = verify_cert(data)
+
+        if args.https:
+            data = expose_self_cert_info(data)
 
         output.write(json.dumps(data)+'\n')
