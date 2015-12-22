@@ -9,12 +9,12 @@ from Certificates.validate import verify_cert
 from Clean.CleanErrors import clean_json
 from Clean.NormalizeCert import normalize_cert
 from Clean.NormalizeHttp import normalize_http
-from Logs.ZmapLog import ZmapLog
+from Data.Metadata import Metadata
 from ExternalData.ReverseDNS import reverse_dns
 from ExternalData.Whois import whois
 from HTTP.HttpProcess import HttpProcess
-from HTTP.Metadata import Metadata
-from HTTP.Header import *
+from Logs.ZmapLog import ZmapLog
+from SSH import SshProcess
 
 
 def argument_parser():
@@ -27,6 +27,7 @@ def argument_parser():
     parser.add_argument('--dns_reverse', help='Set the machine name', action='store_true', required=False)
     parser.add_argument('--http', help='Parse http info', action='store_true', required=False)
     parser.add_argument('--https', help='Parse https info', action='store_true', required=False)
+    parser.add_argument('--ssh', help='Parse ssh info', action='store_true', required=False)
     parser.add_argument('--normalize_http', help='Normalize old http scans fields', action='store_true', required=False)
     parser.add_argument('--normalize_cert', help='Normalize old certificate scans fields', action='store_true', required=False)
     parser.add_argument('--validate_cert', help='Validate server certificate', action='store_true', required=False)
@@ -103,5 +104,16 @@ if __name__ == '__main__':
 
         if args.https:
             data = expose_self_cert_info(data)
+
+        if args.ssh:
+            if 'response' in data:
+                subclasses = SshProcess.all_subclasses()
+                meta = Metadata()
+
+                for sub in subclasses:
+                    meta = sub().process(data, meta)
+
+                if not meta.is_empty():
+                    data['metadata'] = meta.to_dict()
 
         output.write(json.dumps(data)+'\n')

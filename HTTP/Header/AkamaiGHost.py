@@ -1,6 +1,5 @@
 import re
 from HTTP.HttpProcess import HttpProcess
-from HTTP.Metadata import Metadata
 
 __author__ = 'eduardo'
 
