@@ -15,6 +15,7 @@ from ExternalData.Whois import whois
 from HTTP.HttpProcess import HttpProcess
 from Logs.ZmapLog import ZmapLog
 from SSH import SshProcess
+from HTTP.Header import *
 
 
 def argument_parser():
