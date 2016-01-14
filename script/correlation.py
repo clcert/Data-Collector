@@ -1,5 +1,7 @@
 import csv
 
+# Procesa la informacion obtenida por zmap tabulandos los quipos con puertos abiertos
+
 zmap_files = [('port 22', 'port-22.csv'), ('port 25', 'port-25.csv'), ('port 80', 'port-80.csv'),
               ('port 110', 'port-110.csv'), ('port 143', 'port-143.csv'), ('port 443', 'port-443.csv'),
               ('port 465', 'port-465.csv'), ('port 993', 'port-993.csv'), ('port 995', 'port-995.csv'),
