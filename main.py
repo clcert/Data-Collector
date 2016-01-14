@@ -15,6 +15,7 @@ from ExternalData.Whois import whois
 from HTTP.HttpProcess import HttpProcess
 from Logs.ZmapLog import ZmapLog
 from SSH import SshProcess
+from SSH.Juniper import Juniper
 from HTTP.Header import *
 
 
@@ -34,6 +35,7 @@ def argument_parser():
     parser.add_argument('--validate_cert', help='Validate server certificate', action='store_true', required=False)
     parser.add_argument('--clean_errors', help='Clean the lines with only error an ip fields', action='store_true', required=False)
     parser.add_argument('--zmap_log', help='Parse Zmap log', action='store_true', required=False)
+    parser.add_argument('--juniper', help='Filter the machine with juniper backdoor', action='store_true', required='false')
     return parser.parse_args()
 
 
@@ -87,6 +89,10 @@ if __name__ == '__main__':
             whois_response = whois(data['ip'])
             if whois_response is not None:
                 data['whois'] = whois_response
+
+        if args.juniper:
+            if not Juniper().test(data):
+                continue
 
         if args.http:
             data = HttpProcess.parse_header(data)
