@@ -34,9 +34,9 @@ optional arguments:
 
 ## Avisos
 La ejecución de los siguientes procedimietos demora varios minutos:
-    - whois
-    - reverse_dns
-    - validate_cert
+  - whois
+  - reverse_dns
+  - validate_cert
     
 ## Documentación
 La documentación de cada paquete se encuentra en su interior en formato de un readme
