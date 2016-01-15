@@ -33,7 +33,7 @@ optional arguments:
 ```
 
 ## Avisos
-La ejecución de los siguentes porcedimietos demora varios minutos:
+La ejecución de los siguientes procedimietos demora varios minutos:
     * whois
     * reverse_dns
     * validate_cert
