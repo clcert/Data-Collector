@@ -16,6 +16,7 @@ def get_cert_info(data):
     :param data: dict
     :return: dict
     """
+    #TODO expose more info
     cert = dict()
 
     if 'signatureAlgorithm' in data:
