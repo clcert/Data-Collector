@@ -31,10 +31,12 @@ def verify_cert(data):
                 out = check_output(['openssl', 'verify', '-CApath', '/etc/ssl/certs', '-untrusted', 'chain.crt', 'cert.crt'])
 
         except CalledProcessError:
-            return False
-        if certificate_expired(out) or self_signed(out):
-            return False
-        return True
+            return False, None
+        if certificate_expired(out):
+            return False, 'Certificate expired'
+        elif self_signed(out):
+            return False, 'Self signed'
+        return True, None
 
 
 def certificate_expired(output):
