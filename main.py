@@ -107,7 +107,7 @@ if __name__ == '__main__':
                     data['metadata'] = meta.to_dict()
 
         if args.validate_cert and 'chain' in data:
-            data['validate'] = verify_cert(data)
+            data['validate'], data['reason'] = verify_cert(data)
 
         if args.https:
             data = expose_self_cert_info(data)
