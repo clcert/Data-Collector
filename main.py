@@ -35,7 +35,7 @@ def argument_parser():
     parser.add_argument('--validate_cert', help='Validate server certificate', action='store_true', required=False)
     parser.add_argument('--clean_errors', help='Clean the lines with only error an ip fields', action='store_true', required=False)
     parser.add_argument('--zmap_log', help='Parse Zmap log', action='store_true', required=False)
-    parser.add_argument('--juniper', help='Filter the machine with juniper backdoor', action='store_true', required='false')
+    parser.add_argument('--juniper', help='Filter the machine with juniper backdoor', action='store_true', required=False)
     return parser.parse_args()
 
 
