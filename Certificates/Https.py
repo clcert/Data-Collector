@@ -42,32 +42,32 @@ def expose_self_cert_info(data):
     return data
 
 
-a = dict()
-a1 = dict()
-b = dict()
-b1 = dict()
-
-
-a1['hola'] = 12
-b1['hola'] = 13
-
-#a['elem'] = a1
-#b['elem'] = b1
-
-lista =  list()
-lista.append(a1)
-lista.append(b1)
-
-final = dict()
-final['lista'] = lista
-
-print final
-
-otra_lista = final['lista']
-for l in otra_lista:
-    l['chao'] = 15
-
-print final
+# a = dict()
+# a1 = dict()
+# b = dict()
+# b1 = dict()
+#
+#
+# a1['hola'] = 12
+# b1['hola'] = 13
+#
+# #a['elem'] = a1
+# #b['elem'] = b1
+#
+# lista =  list()
+# lista.append(a1)
+# lista.append(b1)
+#
+# final = dict()
+# final['lista'] = lista
+#
+# print final
+#
+# otra_lista = final['lista']
+# for l in otra_lista:
+#     l['chao'] = 15
+#
+# print final
 
 
 

@@ -2,6 +2,7 @@ import argparse
 import json
 import sys
 
+import progressbar
 from datetime import date
 
 from Certificates.Https import expose_self_cert_info
@@ -41,8 +42,12 @@ def argument_parser():
 
 if __name__ == '__main__':
     args = argument_parser()
+    num_lines = sum(1 for line in open(args.input))
+
     input = open(args.input, 'r')
     output = open(args.output, 'w')
+
+    bar = progressbar.ProgressBar(maxval=num_lines, widgets=['Data Collector:', progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
     count = 0
 
     if args.date and args.date.count('/') == 2:
@@ -61,10 +66,11 @@ if __name__ == '__main__':
         output.write(json.dumps(log_dict))
         sys.exit(1)
 
+    bar.start()
+
     for line in input:
         count += 1
-        if count % 1000 == 0:
-            print count
+        bar.update(count)
 
         data = json.loads(line)
 
@@ -124,3 +130,5 @@ if __name__ == '__main__':
                     data['metadata'] = meta.to_dict()
 
         output.write(json.dumps(data)+'\n')
+
+    bar.finish()
