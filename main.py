@@ -5,8 +5,8 @@ import sys
 import progressbar
 from datetime import date
 
-from Certificates.Https import expose_self_cert_info
-from Certificates.validate import verify_cert
+
+from Certificates.Https import Https
 from Clean.CleanErrors import clean_json
 from Clean.NormalizeCert import normalize_cert
 from Clean.NormalizeHttp import normalize_http
@@ -29,11 +29,10 @@ def argument_parser():
     parser.add_argument('--whois', help='Set whois ip response', action='store_true', required=False)
     parser.add_argument('--dns_reverse', help='Set the machine name', action='store_true', required=False)
     parser.add_argument('--http', help='Parse http info', action='store_true', required=False)
-    parser.add_argument('--https', help='Parse https info', action='store_true', required=False)
+    parser.add_argument('--https', help='Parse https certificate info and validate this', action='store_true', required=False)
     parser.add_argument('--ssh', help='Parse ssh info', action='store_true', required=False)
     parser.add_argument('--normalize_http', help='Normalize old http scans fields', action='store_true', required=False)
     parser.add_argument('--normalize_cert', help='Normalize old certificate scans fields', action='store_true', required=False)
-    parser.add_argument('--validate_cert', help='Validate server certificate', action='store_true', required=False)
     parser.add_argument('--clean_errors', help='Clean the lines with only error an ip fields', action='store_true', required=False)
     parser.add_argument('--zmap_log', help='Parse Zmap log', action='store_true', required=False)
     parser.add_argument('--juniper', help='Filter the machine with juniper backdoor', action='store_true', required=False)
@@ -112,11 +111,11 @@ if __name__ == '__main__':
                 if not meta.is_empty():
                     data['metadata'] = meta.to_dict()
 
-        if args.validate_cert and 'chain' in data:
-            data['validate'], data['reason'] = verify_cert(data)
-
         if args.https:
-            data = expose_self_cert_info(data)
+            https = Https(data)
+            https.extract_cert_information()
+            https.verify_certificate()
+            data = https.get_data()
 
         if args.ssh:
             if 'response' in data:
