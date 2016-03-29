@@ -2,7 +2,6 @@ import argparse
 import json
 import sys
 
-import progressbar
 from datetime import date
 
 
@@ -16,6 +15,7 @@ from HTTP.HttpNormalizer import HttpNormalizer
 from HTTP.HttpPreprocessor import HttpPreprocessor
 from HTTP.HttpProcess import HttpProcess
 from Logs.ZmapLog import ZmapLog
+from progressBar import ProgressBar
 from SSH import SshProcess
 from SSH.Juniper import Juniper
 from HTTP.Header import *
@@ -39,62 +39,63 @@ def argument_parser():
     return parser.parse_args()
 
 
+def parse_date(date_string):
+    if date_string.count('/') == 2:
+        day, month, year = args.date.split('/')
+        return date(int(year), int(month), int(day))
+
+    print "Error: Wrong date format"
+    sys.exit(1)
+
+
 if __name__ == '__main__':
     args = argument_parser()
-    num_lines = sum(1 for line in open(args.input))
+    progress_bar = ProgressBar(args.input)
+    date = parse_date(args.date)
 
     input = open(args.input, 'r')
     output = open(args.output, 'w')
 
-    bar = progressbar.ProgressBar(maxval=num_lines, widgets=['Data Collector:', progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
-    count = 0
 
-    if args.date and args.date.count('/') == 2:
-        day, month, year = args.date.split('/')
-        date = str(date(int(year), int(month), int(day)))
-    elif args.date:
-        sys.exit(1)
 
-    if args.zmap_log and args.port and args.date:
-        log = ZmapLog()
-        log.process_log(input)
-        log_dict = log.to_dict()
-        log_dict['port'] = args.port
-        log_dict['date'] = date
+    # if args.zmap_log:
+    #     log = ZmapLog()
+    #     log.process_log(input)
+    #     log_dict = log.to_dict()
+    #     log_dict['port'] = args.port
+    #     log_dict['date'] = str(date)
+    #
+    #     output.write(json.dumps(log_dict))
+    #     sys.exit(1)
 
-        output.write(json.dumps(log_dict))
-        sys.exit(1)
-
-    bar.start()
+    progress_bar.start()
 
     for line in input:
-        count += 1
-        bar.update(count)
-
+        progress_bar.update(1)
         data = json.loads(line)
 
-        if args.normalize_cert:
-            data = normalize_cert(data)
+        # if args.normalize_cert:
+        #     data = normalize_cert(data)
+        #
+        # if args.clean_errors and clean_json(data):
+        #     continue
 
-        if args.clean_errors and clean_json(data):
-            continue
+        # if args.date:
+        #     data['date'] = date
 
-        if args.date:
-            data['date'] = date
-
-        if args.dns_reverse:
-            reverse = reverse_dns(data['ip'])
-            if reverse != 'None':
-                data['dns-reverse'] = reverse
-
-        if args.whois:
-            whois_response = whois(data['ip'])
-            if whois_response is not None:
-                data['whois'] = whois_response
-
-        if args.juniper:
-            if not Juniper().test(data):
-                continue
+        # if args.dns_reverse:
+        #     reverse = reverse_dns(data['ip'])
+        #     if reverse != 'None':
+        #         data['dns-reverse'] = reverse
+        #
+        # if args.whois:
+        #     whois_response = whois(data['ip'])
+        #     if whois_response is not None:
+        #         data['whois'] = whois_response
+        #
+        # if args.juniper:
+        #     if not Juniper().test(data):
+        #         continue
 
         if args.http:
             data = HttpPreprocessor.parse_headers(HttpNormalizer.normalize(data))
@@ -113,17 +114,17 @@ if __name__ == '__main__':
             https.verify_certificate()
             data = https.get_data()
 
-        if args.ssh:
-            if 'response' in data:
-                subclasses = SshProcess.all_subclasses()
-                meta = Metadata()
-
-                for sub in subclasses:
-                    meta = sub().process(data, meta)
-
-                if not meta.is_empty():
-                    data['metadata'] = meta.to_dict()
+        # if args.ssh:
+        #     if 'response' in data:
+        #         subclasses = SshProcess.all_subclasses()
+        #         meta = Metadata()
+        #
+        #         for sub in subclasses:
+        #             meta = sub().process(data, meta)
+        #
+        #         if not meta.is_empty():
+        #             data['metadata'] = meta.to_dict()
 
         output.write(json.dumps(data)+'\n')
 
-    bar.finish()
+    progress_bar.finish()
