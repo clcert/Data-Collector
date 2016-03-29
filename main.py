@@ -12,7 +12,7 @@ from Clean.NormalizeCert import normalize_cert
 from Data.Metadata import Metadata
 from ExternalData.ReverseDNS import reverse_dns
 from ExternalData.Whois import whois
-from HTTP import HttpNormalizer
+from HTTP.HttpNormalizer import HttpNormalizer
 from HTTP.HttpPreprocessor import HttpPreprocessor
 from HTTP.HttpProcess import HttpProcess
 from Logs.ZmapLog import ZmapLog
@@ -24,9 +24,9 @@ from HTTP.Header import *
 def argument_parser():
     parser = argparse.ArgumentParser(description='Recollect IP data')
     parser.add_argument('-i', '--input', help='Input file name', required=True)
-    parser.add_argument('-o', '--output', help='Output file name', required=False)
-    parser.add_argument('--port', help='Set the scanned port', required=False)
-    parser.add_argument('--date', help='Add the date of scan (input format dd/mm/yyyy)', required=False)
+    parser.add_argument('-o', '--output', help='Output file name', required=True)
+    parser.add_argument('--port', help='Set the scanned port', required=True)
+    parser.add_argument('--date', help='Add the date of scan (input format dd/mm/yyyy)', required=True)
     parser.add_argument('--whois', help='Set whois ip response', action='store_true', required=False)
     parser.add_argument('--dns_reverse', help='Set the machine name', action='store_true', required=False)
     parser.add_argument('--http', help='Parse http info', action='store_true', required=False)
@@ -98,15 +98,14 @@ if __name__ == '__main__':
 
         if args.http:
             data = HttpPreprocessor.parse_headers(HttpNormalizer.normalize(data))
-            if 'server' in data:
-                subclasses = HttpProcess.all_subclasses()
-                meta = Metadata()
+            subclasses = HttpProcess.all_subclasses()
+            meta = Metadata()
 
-                for sub in subclasses:
-                    meta = sub().process(data, meta)
+            for sub in subclasses:
+                meta = sub().process(data, meta)
 
-                if not meta.is_empty():
-                    data['metadata'] = meta.to_dict()
+            if not meta.is_empty():
+                data['metadata'] = meta.to_dict()
 
         if args.https:
             https = Https(data)

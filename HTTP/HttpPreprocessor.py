@@ -9,6 +9,7 @@ class HttpPreprocessor(object):
             for key, value in header.iteritems():
                 if key == "null":
                     parsed_header['status_code'] = HttpPreprocessor.sanitize_header_value(value)
+                    continue
 
                 parsed_header[HttpPreprocessor.sanitize_header_name(key)] = HttpPreprocessor.sanitize_header_value(
                     value)
