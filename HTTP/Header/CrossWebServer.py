@@ -4,7 +4,7 @@ from HTTP.HttpProcess import HttpProcess
 __author__ = 'eduardo'
 
 
-class CrossWebServer(HttpProcess):#TODO Remove don't add new information
+class CrossWebServer(HttpProcess):#TODO Revisar
 
     protocol = 'HTTP'
     subprotocol = 'HEADER'
@@ -16,8 +16,10 @@ class CrossWebServer(HttpProcess):#TODO Remove don't add new information
         :param data: dict
         :param metadata: Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             if self.re_expr.search(server):
                 metadata.service.product = 'Cross Web Server'
+
         return metadata

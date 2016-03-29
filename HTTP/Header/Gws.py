@@ -5,7 +5,6 @@ __author__ = 'eduardo'
 
 
 class Gws(HttpProcess):
-
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -17,9 +16,11 @@ class Gws(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             if self.re_expr.search(server):
                 metadata.service.manufacturer = 'Google'
                 metadata.service.product = 'Web Server'
+
         return metadata

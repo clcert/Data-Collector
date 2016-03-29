@@ -20,10 +20,12 @@ class HuaweiMA5600(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             if self.re_expr.search(server):
                 metadata.device.manufacturer = 'Huawei'
                 metadata.device.product = 'MA5600'
                 metadata.device.type = 'IP broadband access device'
+
         return metadata

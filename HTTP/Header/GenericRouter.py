@@ -4,7 +4,7 @@ from HTTP.HttpProcess import HttpProcess
 __author__ = 'eduardo'
 
 
-class GenericRouter(HttpProcess):
+class GenericRouter(HttpProcess): #TODO Revisar
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -16,8 +16,10 @@ class GenericRouter(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             if self.re_expr.search(server):
                 metadata.device.type = 'Router'
+
         return metadata

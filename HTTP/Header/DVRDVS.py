@@ -16,9 +16,12 @@ class DVRDVS(HttpProcess):
         :param data: dict
         :param metadata: Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             if self.re_expr.search(server):
                 metadata.service.product = 'DVRDVS Webs'
                 metadata.device.type = 'Camera'
+
         return metadata
+

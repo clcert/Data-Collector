@@ -16,10 +16,13 @@ class RaLink(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             match_obj = self.re_expr.search(server)
+
             if match_obj:
                 metadata.service.product = 'RaLink httpd'
                 metadata.device.type = 'Router'
+
         return metadata

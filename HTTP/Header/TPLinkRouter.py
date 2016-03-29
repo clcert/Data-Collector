@@ -16,9 +16,11 @@ class TPLinkRouter(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             if self.re_expr.search(server):
                 metadata.device.manufacturer = 'TP Link'
                 metadata.device.type = 'Router'
+
         return metadata

@@ -16,8 +16,10 @@ class Alphapd(HttpProcess):# TODO Remove class not add new information
         :param metadata: Metadata
         :return metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             if self.re_expr.search(server):
                 metadata.service.product = 'Alphapd'
+
         return metadata

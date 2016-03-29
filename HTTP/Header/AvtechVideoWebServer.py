@@ -16,10 +16,12 @@ class AvtechVideoWebServer(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             if self.re_expr.search(server):
                 metadata.service.manufacturer = 'Avtech'
                 metadata.service.product = 'Video Web Server'
                 metadata.device.type = 'Camera'
+
         return metadata

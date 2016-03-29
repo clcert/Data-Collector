@@ -13,6 +13,7 @@ from Data.Metadata import Metadata
 from ExternalData.ReverseDNS import reverse_dns
 from ExternalData.Whois import whois
 from HTTP import HttpNormalizer
+from HTTP.HttpPreprocessor import HttpPreprocessor
 from HTTP.HttpProcess import HttpProcess
 from Logs.ZmapLog import ZmapLog
 from SSH import SshProcess
@@ -96,7 +97,7 @@ if __name__ == '__main__':
                 continue
 
         if args.http:
-            data = HttpProcess.parse_header(HttpNormalizer.normalize(data))
+            data = HttpPreprocessor.parse_headers(HttpNormalizer.normalize(data))
             if 'server' in data:
                 subclasses = HttpProcess.all_subclasses()
                 meta = Metadata()

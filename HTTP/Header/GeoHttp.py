@@ -20,13 +20,15 @@ class GeoHttp(HttpProcess):
         :param metadata: Metadata
         :return metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             if self.re_expr.search(server):
                 metadata.service.manufacturer = 'GeoVision'
                 metadata.service.product = 'Geo Http Server'
                 metadata.device.manufacturer = 'GeoVision'
                 metadata.device_type = 'Camera'
+
         return metadata
 
 

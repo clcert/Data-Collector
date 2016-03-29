@@ -5,6 +5,10 @@ __author__ = 'eduardo'
 
 
 class UcHttpd(HttpProcess):
+    """
+    https://www.micrium.com/
+    https://doc.micrium.com/display/httpdoc/About+HTTP-server
+    """
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -16,11 +20,15 @@ class UcHttpd(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             match_obj = self.re_expr.search(server)
+
             if match_obj:
+                metadata.service.manufacturer = 'Micrium'
                 metadata.service.product = 'UC httpd'
                 metadata.service.version = match_obj.group('version')
-                metadata.device.type = 'Camera' # Todo I think
+                # metadata.device.type = 'Camera'
+
         return metadata

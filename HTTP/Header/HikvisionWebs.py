@@ -20,11 +20,13 @@ class HikvisionWebs(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             if self.re_expr.search(server):
                 metadata.service.manufacturer = 'Hikvision'
                 metadata.service.product = 'Hikvision Webs'
                 metadata.device.manufacturer = 'Hikvision'
                 metadata.device.type = 'Camera'
+
         return metadata

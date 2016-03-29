@@ -19,11 +19,14 @@ class DlinkSerieDCS(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             match_obj = self.re_expr.search(server)
+
             if match_obj:
                 metadata.device.manufacturer = 'Dlink'
                 metadata.device.product = match_obj.group('product')
                 metadata.device.type = 'Camera'
+
         return metadata

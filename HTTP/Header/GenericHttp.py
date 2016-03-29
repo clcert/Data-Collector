@@ -4,7 +4,7 @@ from HTTP.HttpProcess import HttpProcess
 __author__ = 'eduardo'
 
 
-class GenericHttp(HttpProcess):
+class GenericHttp(HttpProcess): # TODO Revisar
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -16,10 +16,13 @@ class GenericHttp(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             match_obj = self.re_expr.search(server)
+
             if match_obj:
                 metadata.service.product = 'Http Server'
                 metadata.service.version = match_obj.group('version')
+
         return metadata

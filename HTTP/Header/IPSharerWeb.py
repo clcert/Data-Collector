@@ -4,7 +4,7 @@ from HTTP.HttpProcess import HttpProcess
 __author__ = 'eduardo'
 
 
-class IPSharereWeb(HttpProcess):
+class IPSharereWeb(HttpProcess): #TODO Revisar
     """
     Router, modems, cameras, embedded systems, etc
     """
@@ -19,10 +19,13 @@ class IPSharereWeb(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             match_obj = self.re_expr.search(server)
+
             if match_obj:
                 metadata.service.product = 'IP Sharer Web'
                 metadata.service.version = match_obj.group('version')
+
         return metadata

@@ -19,13 +19,16 @@ class TibetSystem(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             match_obj = self.re_expr.search(server)
+
             if match_obj:
                 metadata.service.manufacturer = 'TibetSystem'
                 metadata.service.product = 'TibetSystem Server'
                 metadata.service.version = match_obj.group('version')
                 metadata.device.manufacturer = 'Gnet'
                 metadata.device.type = 'Camera'
+
         return metadata

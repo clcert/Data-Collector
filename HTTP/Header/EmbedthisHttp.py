@@ -19,12 +19,15 @@ class EmbedthisHttp(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             match_obj = self.re_expr.search(server)
+
             if match_obj:
                 metadata.service.manufacturer = 'Embedthis'
                 metadata.service.product = 'Http'
                 metadata.service.version = match_obj.group('version')
                 metadata.device.type = 'Embedded'
+
         return metadata

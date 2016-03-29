@@ -16,13 +16,16 @@ class WcyWebServer(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             match_obj = self.re_expr.search(server)
+
             if match_obj:
                 metadata.service.product = 'WCY Web Server'
                 metadata.service.version = match_obj.group('version')
                 metadata.device.os = match_obj.group('os')
+
         return metadata
 
 

@@ -5,6 +5,9 @@ __author__ = 'eduardo'
 
 
 class SunOneWebServer(HttpProcess):
+    """
+    https://docs.oracle.com/cd/E19199-01/817-1831-10/agintro.html
+    """
     protocol = 'HTTP'
     subprotocol = 'HEADER'
 
@@ -16,11 +19,14 @@ class SunOneWebServer(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             match_obj = self.re_expr.search(server)
+
             if match_obj:
                 metadata.service.manufacturer = 'Sun'
                 metadata.service.product = 'ONE Web Server'
                 metadata.service.version = match_obj.group('version')
+
         return metadata

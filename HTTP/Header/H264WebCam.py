@@ -19,10 +19,12 @@ class H264WebCam(HttpProcess):
         :param metadata: Metadata
         :return Metadata
         """
-        server = data['server']
+        server = self.get_header_field(data, 'server')
+
         if server:
             if self.re_expr.search(server):
                 metadata.service.manufacturer = 'Timhillone'
                 metadata.service.product = 'H264 WebCam'
                 metadata.device.type = 'Camera'
+
         return metadata   
