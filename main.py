@@ -9,10 +9,10 @@ from datetime import date
 from Certificates.Https import Https
 from Clean.CleanErrors import clean_json
 from Clean.NormalizeCert import normalize_cert
-from Clean.NormalizeHttp import normalize_http
 from Data.Metadata import Metadata
 from ExternalData.ReverseDNS import reverse_dns
 from ExternalData.Whois import whois
+from HTTP import HttpNormalizer
 from HTTP.HttpProcess import HttpProcess
 from Logs.ZmapLog import ZmapLog
 from SSH import SshProcess
@@ -31,7 +31,6 @@ def argument_parser():
     parser.add_argument('--http', help='Parse http info', action='store_true', required=False)
     parser.add_argument('--https', help='Parse https certificate info and validate this', action='store_true', required=False)
     parser.add_argument('--ssh', help='Parse ssh info', action='store_true', required=False)
-    parser.add_argument('--normalize_http', help='Normalize old http scans fields', action='store_true', required=False)
     parser.add_argument('--normalize_cert', help='Normalize old certificate scans fields', action='store_true', required=False)
     parser.add_argument('--clean_errors', help='Clean the lines with only error an ip fields', action='store_true', required=False)
     parser.add_argument('--zmap_log', help='Parse Zmap log', action='store_true', required=False)
@@ -73,9 +72,6 @@ if __name__ == '__main__':
 
         data = json.loads(line)
 
-        if args.normalize_http:
-            data = normalize_http(data)
-
         if args.normalize_cert:
             data = normalize_cert(data)
 
@@ -100,7 +96,7 @@ if __name__ == '__main__':
                 continue
 
         if args.http:
-            data = HttpProcess.parse_header(data)
+            data = HttpProcess.parse_header(HttpNormalizer.normalize(data))
             if 'server' in data:
                 subclasses = HttpProcess.all_subclasses()
                 meta = Metadata()
