@@ -2,12 +2,10 @@ import argparse
 import json
 import sys
 
-from datetime import date
 
 
 from Certificates.Https import Https
 from Clean.CleanErrors import clean_json
-from Clean.NormalizeCert import normalize_cert
 from Data.Metadata import Metadata
 from ExternalData.ReverseDNS import reverse_dns
 from ExternalData.Whois import whois
@@ -42,7 +40,7 @@ def argument_parser():
 def parse_date(date_string):
     if date_string.count('/') == 2:
         day, month, year = args.date.split('/')
-        return date(int(year), int(month), int(day))
+        return datetime.date(int(year), int(month), int(day))
 
     print "Error: Wrong date format"
     sys.exit(1)
@@ -74,15 +72,9 @@ if __name__ == '__main__':
         progress_bar.update(1)
         data = json.loads(line)
 
-        # if args.normalize_cert:
-        #     data = normalize_cert(data)
-        #
         # if args.clean_errors and clean_json(data):
         #     continue
-
-        # if args.date:
-        #     data['date'] = date
-
+        #
         # if args.dns_reverse:
         #     reverse = reverse_dns(data['ip'])
         #     if reverse != 'None':
@@ -109,10 +101,8 @@ if __name__ == '__main__':
                 data['metadata'] = meta.to_dict()
 
         if args.https:
-            https = Https(data)
-            https.extract_cert_information()
-            https.verify_certificate()
-            data = https.get_data()
+            https = Https(data, date)
+            data = https.process()
 
         # if args.ssh:
         #     if 'response' in data:
