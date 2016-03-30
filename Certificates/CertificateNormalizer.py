@@ -3,13 +3,12 @@ class CertificateNormalizer(object):
     def __init__(self, data):
         self.data = data
 
-    def get_data(self):
-        return self.data
-
     def normalize(self):
         self.__rename_fields()
         self.__create_chain()
         self.__remove_old_fields()
+
+        return self.data
 
     def __remove_old_fields(self):
         self.data.pop('validation', None)
@@ -55,11 +54,6 @@ class CertificateNormalizer(object):
         if 'beastCipher' in self.data:
             self.data['beast_cipher'] = self.data['beastCipher']
             self.data.pop('beastCipher', None)
-
-        if 'chain' in self.data:
-            for cert in self.data['chain']:
-                cert['pem_cert'] = cert['PemCert']
-                cert.pop('PemCert', None)
 
     def __create_chain(self):
         cert = self.format_pem_cert(self.data.get('PemCert'))
