@@ -14,7 +14,7 @@ class HttpPreprocessor(object):
                 parsed_header[HttpPreprocessor.sanitize_header_name(key)] = HttpPreprocessor.sanitize_header_value(
                     value)
 
-            data.pop('header')
+            data.pop('header', None)
             data['header'] = parsed_header
 
         return data
