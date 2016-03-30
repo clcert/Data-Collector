@@ -7,6 +7,7 @@ class CertificateNormalizer(object):
         return self.data
 
     def normalize(self):
+        self.__rename_fields()
         self.__create_chain()
         self.__remove_old_fields()
 
@@ -20,6 +21,45 @@ class CertificateNormalizer(object):
         self.data.pop('keyBits', None)
         self.data.pop('PemCert', None)
         self.data.pop('chainAuthority', None)
+
+    def __rename_fields(self):
+
+        if 'tlsProtocol' in self.data:
+            self.data['tls_protocol'] = self.data['tlsProtocol']
+            self.data.pop('tlsProtocol', None)
+
+        if 'cipherSuite' in self.data:
+            self.data['cipher_suite'] = self.data['cipherSuite']
+            self.data.pop('cipherSuite', None)
+
+        if 'ciphersSuites' in self.data:
+            self.data['test_cipher_suites'] = self.data['ciphersSuites']
+            self.data.pop('ciphersSuites', None)
+
+        if 'tlsProtocol' in self.data:
+            self.data['tls_protocol'] = self.data['tlsProtocol']
+            self.data.pop('tlsProtocol', None)
+
+        if 'tlsProtocol' in self.data:
+            self.data['tls_protocol'] = self.data['tlsProtocol']
+            self.data.pop('tlsProtocol', None)
+
+        if 'protocols' in self.data:
+            self.data['supported_protocols'] = self.data['protocols']
+            self.data.pop('protocols', None)
+
+        if 'heartbleedData' in self.data:
+            self.data['heartbleed_data'] = self.data['heartbleedData']
+            self.data.pop('heartbleedData', None)
+
+        if 'beastCipher' in self.data:
+            self.data['beast_cipher'] = self.data['beastCipher']
+            self.data.pop('beastCipher', None)
+
+        if 'chain' in self.data:
+            for cert in self.data['chain']:
+                cert['pem_cert'] = cert['PemCert']
+                cert.pop('PemCert', None)
 
     def __create_chain(self):
         cert = self.format_pem_cert(self.data.get('PemCert'))
@@ -39,10 +79,11 @@ class CertificateNormalizer(object):
         chain = self.data.get('chainAuthority')
         pem_chain = list()
 
-        for elem in chain:
-            pem = elem.get('PemCert')
-            if pem is not None:
-                pem_chain.append(self.format_pem_cert(pem))
+        if chain is not None:
+            for elem in chain:
+                pem = elem.get('PemCert')
+                if pem is not None:
+                    pem_chain.append(self.format_pem_cert(pem))
 
         return pem_chain
 
