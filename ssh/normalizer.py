@@ -3,7 +3,7 @@ class Normalizer(object):
         super(Normalizer, self).__init__()
         self.data = data
 
-    def process(self):
+    def normalize(self):
         self.__rename_fields()
 
         return self.data

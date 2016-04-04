@@ -2,8 +2,7 @@ import argparse
 import json
 import sys
 
-
-
+from Certificates.CertificateNormalizer import CertificateNormalizer
 from Certificates.Https import Https
 from Clean.CleanErrors import clean_json
 from Data.Metadata import Metadata
@@ -14,9 +13,9 @@ from HTTP.HttpPreprocessor import HttpPreprocessor
 from HTTP.HttpProcess import HttpProcess
 from Logs.ZmapLog import ZmapLog
 from progressBar import ProgressBar
-from SSH import SshProcess
-from SSH.Juniper import Juniper
+from ssh.Juniper import Juniper
 from HTTP.Header import *
+from ssh.ssh_process import SSHProcess
 
 
 def argument_parser():
@@ -28,12 +27,16 @@ def argument_parser():
     parser.add_argument('--whois', help='Set whois ip response', action='store_true', required=False)
     parser.add_argument('--dns_reverse', help='Set the machine name', action='store_true', required=False)
     parser.add_argument('--http', help='Parse http info', action='store_true', required=False)
-    parser.add_argument('--https', help='Parse https certificate info and validate this', action='store_true', required=False)
+    parser.add_argument('--https', help='Parse https certificate info and validate this', action='store_true',
+                        required=False)
     parser.add_argument('--ssh', help='Parse ssh info', action='store_true', required=False)
-    parser.add_argument('--normalize_cert', help='Normalize old certificate scans fields', action='store_true', required=False)
-    parser.add_argument('--clean_errors', help='Clean the lines with only error an ip fields', action='store_true', required=False)
+    parser.add_argument('--normalize_cert', help='Normalize old certificate scans fields', action='store_true',
+                        required=False)
+    parser.add_argument('--clean_errors', help='Clean the lines with only error an ip fields', action='store_true',
+                        required=False)
     parser.add_argument('--zmap_log', help='Parse Zmap log', action='store_true', required=False)
-    parser.add_argument('--juniper', help='Filter the machine with juniper backdoor', action='store_true', required=False)
+    parser.add_argument('--juniper', help='Filter the machine with juniper backdoor', action='store_true',
+                        required=False)
     return parser.parse_args()
 
 
@@ -46,6 +49,31 @@ def parse_date(date_string):
     sys.exit(1)
 
 
+def https(data, date):
+    normalized_data = CertificateNormalizer(data).normalize()
+    return Https(normalized_data, date).process()
+
+
+def ssh(data):
+    normalized_data = ssh.normalizer.Normalizer(data).normalize()
+    subclasses = SSHProcess.all_subclasses()
+    meta = Metadata()
+
+    for sub in subclasses:
+        meta = sub().process(normalized_data, meta)
+
+    if not meta.is_empty():
+        normalized_data['metadata'] = normalized_data.to_dict()
+
+    normalized_data = Juniper.has_backdoor(normalized_data)
+
+    return normalized_data
+
+
+def main():
+    pass
+
+
 if __name__ == '__main__':
     args = argument_parser()
     progress_bar = ProgressBar(args.input)
@@ -53,8 +81,6 @@ if __name__ == '__main__':
 
     input = open(args.input, 'r')
     output = open(args.output, 'w')
-
-
 
     # if args.zmap_log:
     #     log = ZmapLog()
@@ -84,10 +110,6 @@ if __name__ == '__main__':
         #     whois_response = whois(data['ip'])
         #     if whois_response is not None:
         #         data['whois'] = whois_response
-        #
-        # if args.juniper:
-        #     if not Juniper().test(data):
-        #         continue
 
         if args.http:
             data = HttpPreprocessor.parse_headers(HttpNormalizer.normalize(data))
@@ -101,20 +123,11 @@ if __name__ == '__main__':
                 data['metadata'] = meta.to_dict()
 
         if args.https:
-            https = Https(data, date)
-            data = https.process()
+            data = https(data, date)
 
-        # if args.ssh:
-        #     if 'response' in data:
-        #         subclasses = SshProcess.all_subclasses()
-        #         meta = Metadata()
-        #
-        #         for sub in subclasses:
-        #             meta = sub().process(data, meta)
-        #
-        #         if not meta.is_empty():
-        #             data['metadata'] = meta.to_dict()
+        if args.ssh:
+            data = ssh()
 
-        output.write(json.dumps(data)+'\n')
+        output.write(json.dumps(data) + '\n')
 
     progress_bar.finish()
