@@ -1,6 +1,5 @@
 class Normalizer(object):
     def __init__(self, data):
-        super(Normalizer, self).__init__()
         self.data = data
 
     def normalize(self):
