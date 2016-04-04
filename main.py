@@ -3,7 +3,7 @@ import datetime
 import json
 import sys
 
-import Certificates
+import certificates
 import http
 import ssh
 from Clean.CleanErrors import clean_json
@@ -66,7 +66,7 @@ def http_protocol(data):
 
 
 def https_protocol(data, date):
-    normalized_data = Certificates.normalizer.Normalizer(data).normalize()
+    normalized_data = certificates.normalizer.Normalizer(data).normalize()
     return HTTPProcess(normalized_data, date).process()
 
 
