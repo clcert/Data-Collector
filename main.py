@@ -16,7 +16,7 @@ from http.normalizer import Normalizer
 from Logs.ZmapLog import ZmapLog
 from progressBar import ProgressBar
 from ssh.Juniper import Juniper
-from http.Header import *
+from http.header import *
 from ssh.ssh_process import SSHProcess
 
 
