@@ -1,25 +1,25 @@
 import argparse
-import datetime
 import json
 import sys
+
+import datetime
 
 import certificates
 import http
 import ssh
-from Clean.CleanErrors import clean_json
-from Data.Metadata import Metadata
-from ExternalData.ReverseDNS import reverse_dns
-from ExternalData.Whois import whois
-from http.http_process import HTTPProcess
+from clean.clean_errors import clean_json
+from data.metadata import Metadata
+from external_data.reverse_dns import reverse_dns
+from external_data.whois import whois
 from http.http_preprocessor import HTTPPreprocessor
+from http.http_process import HTTPProcess
 from http.normalizer import Normalizer
-from Logs.ZmapLog import ZmapLog
+from logs.zmap_log import ZmapLog
 from progressBar import ProgressBar
+from ssh.ssh_process import SSHProcess
 from ssh.Juniper import Juniper
 from http.header import *
 from ssh.banner import *
-from ssh.ssh_process import SSHProcess
-
 
 def argument_parser():
     parser = argparse.ArgumentParser(description='Recollect IP data')
@@ -38,8 +38,7 @@ def argument_parser():
     parser.add_argument('--clean_errors', help='Clean the lines with only error an ip fields', action='store_true',
                         required=False)
     parser.add_argument('--zmap_log', help='Parse Zmap log', action='store_true', required=False)
-    parser.add_argument('--juniper', help='Filter the machine with juniper backdoor', action='store_true',
-                        required=False)
+
     return parser.parse_args()
 
 
@@ -86,6 +85,35 @@ def ssh_protocol(data):
     return normalized_data
 
 
+def zmap_log(port, date, input):
+    log = ZmapLog()
+
+    log.process_log(input)
+    log_dict = log.to_dict()
+    log_dict['port'] = port
+    log_dict['date'] = str(date)
+
+    return log_dict
+
+
+def dns_reverse(data):
+    reverse = reverse_dns(data['ip'])
+
+    if reverse != 'None':
+        data['dns-reverse'] = reverse
+
+    return data
+
+
+def ip_whois(data):
+    whois_response = whois(data['ip'])
+
+    if whois_response is not None:
+        data['whois'] = whois_response
+
+    return data
+
+
 def main():
     args = argument_parser()
     progress_bar = ProgressBar(args.input)
@@ -94,15 +122,11 @@ def main():
     input = open(args.input, 'r')
     output = open(args.output, 'w')
 
-    # if args.zmap_log:
-    #     log = ZmapLog()
-    #     log.process_log(input)
-    #     log_dict = log.to_dict()
-    #     log_dict['port'] = args.port
-    #     log_dict['date'] = str(date)
-    #
-    #     output.write(json.dumps(log_dict))
-    #     sys.exit(1)
+    if args.zmap_log:
+        log_dict = zmap_log(args.port, date, input)
+
+        output.write(json.dumps(log_dict))
+        sys.exit(0)
 
     progress_bar.start()
 
@@ -110,18 +134,14 @@ def main():
         progress_bar.update(1)
         data = json.loads(line)
 
-        # if args.clean_errors and clean_json(data):
-        #     continue
-        #
-        # if args.dns_reverse:
-        #     reverse = reverse_dns(data['ip'])
-        #     if reverse != 'None':
-        #         data['dns-reverse'] = reverse
-        #
-        # if args.whois:
-        #     whois_response = whois(data['ip'])
-        #     if whois_response is not None:
-        #         data['whois'] = whois_response
+        if args.clean_errors and clean_json(data):
+            continue
+
+        if args.dns_reverse:
+            data = dns_reverse(data)
+
+        if args.whois:
+            data = ip_whois(data)
 
         if args.http:
             data = http_protocol(data)
@@ -135,7 +155,6 @@ def main():
         output.write(json.dumps(data) + '\n')
 
     progress_bar.finish()
-
 
 if __name__ == '__main__':
     main()

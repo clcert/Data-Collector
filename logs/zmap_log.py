@@ -2,7 +2,8 @@ import re
 
 
 class ZmapLog(object):
-    log_regex = '(?P<time>\d+:\d+).*send:\s(?P<send>\d+).*\((?P<send_avg>[\d\.]+\s\w{2}\/\w).*\).*recv:\s(?P<recv>\d+)[^\(]*\((?P<recv_avg>\d+\s\w{1,2}\/\w)[^\)]*\).*hits:\s(?P<hits>[\d\.\%]+)'
+    log_regex = '(?P<time>\d+:\d+).*send:\s(?P<send>\d+).*\((?P<send_avg>[\d\.]+\s\w{2}\/\w).*\).*recv:\s' \
+                '(?P<recv>\d+)[^\(]*\((?P<recv_avg>\d+\s\w{1,2}\/\w)[^\)]*\).*hits:\s(?P<hits>[\d\.\%]+)'
     regex = re.compile(log_regex)
 
     def __init__(self):

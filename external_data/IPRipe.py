@@ -1,8 +1,6 @@
 import urllib
 import json
 
-__author__ = 'eduardo'
-
 urlCL = "https://stat.ripe.net/data/country-resource-list/data.json?resource=CL"
 
 
