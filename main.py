@@ -1,20 +1,22 @@
 import argparse
+import datetime
 import json
 import sys
 
+import http
 from Certificates.CertificateNormalizer import CertificateNormalizer
 from Certificates.Https import Https
 from Clean.CleanErrors import clean_json
 from Data.Metadata import Metadata
 from ExternalData.ReverseDNS import reverse_dns
 from ExternalData.Whois import whois
-from HTTP.HttpNormalizer import HttpNormalizer
-from HTTP.HttpPreprocessor import HttpPreprocessor
-from HTTP.HttpProcess import HttpProcess
+from http.http_process import HTTPProcess
+from http.http_preprocessor import HTTPPreprocessor
+from http.normalizer import Normalizer
 from Logs.ZmapLog import ZmapLog
 from progressBar import ProgressBar
 from ssh.Juniper import Juniper
-from HTTP.Header import *
+from http.Header import *
 from ssh.ssh_process import SSHProcess
 
 
@@ -42,11 +44,24 @@ def argument_parser():
 
 def parse_date(date_string):
     if date_string.count('/') == 2:
-        day, month, year = args.date.split('/')
+        day, month, year = date_string.split('/')
         return datetime.date(int(year), int(month), int(day))
 
     print "Error: Wrong date format"
     sys.exit(1)
+
+
+def http(data):
+    normalized_data = HTTPPreprocessor.parse_headers(http.normalizer.Normalizer(data).normalize())
+    subclasses = HTTPProcess.all_subclasses()
+    meta = Metadata()
+
+    for sub in subclasses:
+        meta = sub().process(normalized_data, meta)
+    if not meta.is_empty():
+        normalized_data['metadata'] = meta.to_dict()
+
+    return normalized_data
 
 
 def https(data, date):
@@ -71,10 +86,6 @@ def ssh(data):
 
 
 def main():
-    pass
-
-
-if __name__ == '__main__':
     args = argument_parser()
     progress_bar = ProgressBar(args.input)
     date = parse_date(args.date)
@@ -112,15 +123,7 @@ if __name__ == '__main__':
         #         data['whois'] = whois_response
 
         if args.http:
-            data = HttpPreprocessor.parse_headers(HttpNormalizer.normalize(data))
-            subclasses = HttpProcess.all_subclasses()
-            meta = Metadata()
-
-            for sub in subclasses:
-                meta = sub().process(data, meta)
-
-            if not meta.is_empty():
-                data['metadata'] = meta.to_dict()
+            data = http(data)
 
         if args.https:
             data = https(data, date)
@@ -131,3 +134,7 @@ if __name__ == '__main__':
         output.write(json.dumps(data) + '\n')
 
     progress_bar.finish()
+
+
+if __name__ == '__main__':
+    main()
