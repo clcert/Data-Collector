@@ -6,9 +6,8 @@ from OpenSSL.crypto import load_certificate, FILETYPE_PEM
 from dateutil import parser
 
 
-class Https(object):
+class HTTPSProcess(object):
     def __init__(self, data, date):
-        super(Https, self).__init__()
         self.data = data
         self.timestamp = str(int(time.mktime(date.timetuple())))
 
@@ -25,33 +24,13 @@ class Https(object):
         chain = self.data['chain']
 
         for cert in chain:
-            self.delete_old_values(cert)
+            self.__delete_old_values(cert)
 
             begin, cert_body, end = cert['pem_cert'].split('\n')
             certificate = self.load_pem_cert(begin + '\n' + textwrap.fill(cert_body, 64) + '\n' + end + '\n')
 
-            subject = dict()
-            subject['raw_information'] = certificate.get_subject().get_components()
-            subject['country_name'] = certificate.get_subject().countryName
-            subject['province_name'] = certificate.get_subject().stateOrProvinceName
-            subject['locality_name'] = certificate.get_subject().localityName
-            subject['organization_name'] = certificate.get_subject().organizationName
-            subject['organization_unit_name'] = certificate.get_subject().organizationalUnitName
-            subject['common_name'] = certificate.get_subject().commonName
-            subject['email_address'] = certificate.get_subject().emailAddress
-
-            issuer = dict()
-            issuer['raw_information'] = certificate.get_issuer().get_components()
-            issuer['country_name'] = certificate.get_issuer().countryName
-            issuer['province_name'] = certificate.get_issuer().stateOrProvinceName
-            issuer['locality_name'] = certificate.get_issuer().localityName
-            issuer['organization_name'] = certificate.get_issuer().organizationName
-            issuer['organization_unit_name'] = certificate.get_issuer().organizationalUnitName
-            issuer['common_name'] = certificate.get_issuer().commonName
-            issuer['email_address'] = certificate.get_issuer().emailAddress
-
-            cert['subject'] = subject
-            cert['issuer'] = issuer
+            cert['subject'] = self.__certificate_entity_data(certificate.get_subject())
+            cert['issuer'] = self.__certificate_entity_data(certificate.get_issuer())
 
             cert['not_before'] = parser.parse(certificate.get_notBefore()).strftime("%Y-%m-%d %H:%M:%S")
             cert['not_after'] = parser.parse(certificate.get_notAfter()).strftime("%Y-%m-%d %H:%M:%S")
@@ -105,11 +84,26 @@ class Https(object):
                 self.data['validate'], self.data['reason'] = False, 'Other error'
 
     @staticmethod
+    def __certificate_entity_data(certificate):
+        entity = dict()
+
+        entity['raw_information'] = certificate.get_components()
+        entity['country_name'] = certificate.countryName
+        entity['province_name'] = certificate.stateOrProvinceName
+        entity['locality_name'] = certificate.localityName
+        entity['organization_name'] = certificate.organizationName
+        entity['organization_unit_name'] = certificate.organizationalUnitName
+        entity['common_name'] = certificate.commonName
+        entity['email_address'] = certificate.emailAddress
+
+        return entity
+
+    @staticmethod
     def load_pem_cert(certificate):
         return load_certificate(FILETYPE_PEM, certificate)
 
     @staticmethod
-    def delete_old_values(certificate):
+    def __delete_old_values(certificate):
         certificate.pop('organizationName', None)
         certificate.pop('organizationURL', None)
         certificate.pop('certificateAuthority', None)

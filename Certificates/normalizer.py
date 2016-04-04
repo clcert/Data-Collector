@@ -1,4 +1,4 @@
-class CertificateNormalizer(object):
+class Normalizer(object):
 
     def __init__(self, data):
         self.data = data

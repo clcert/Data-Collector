@@ -3,9 +3,9 @@ import datetime
 import json
 import sys
 
+import Certificates
 import http
-from Certificates.CertificateNormalizer import CertificateNormalizer
-from Certificates.Https import Https
+import ssh
 from Clean.CleanErrors import clean_json
 from Data.Metadata import Metadata
 from ExternalData.ReverseDNS import reverse_dns
@@ -17,6 +17,7 @@ from Logs.ZmapLog import ZmapLog
 from progressBar import ProgressBar
 from ssh.Juniper import Juniper
 from http.header import *
+from ssh.banner import *
 from ssh.ssh_process import SSHProcess
 
 
@@ -51,7 +52,7 @@ def parse_date(date_string):
     sys.exit(1)
 
 
-def http(data):
+def http_protocol(data):
     normalized_data = HTTPPreprocessor.parse_headers(http.normalizer.Normalizer(data).normalize())
     subclasses = HTTPProcess.all_subclasses()
     meta = Metadata()
@@ -64,12 +65,12 @@ def http(data):
     return normalized_data
 
 
-def https(data, date):
-    normalized_data = CertificateNormalizer(data).normalize()
-    return Https(normalized_data, date).process()
+def https_protocol(data, date):
+    normalized_data = Certificates.normalizer.Normalizer(data).normalize()
+    return HTTPProcess(normalized_data, date).process()
 
 
-def ssh(data):
+def ssh_protocol(data):
     normalized_data = ssh.normalizer.Normalizer(data).normalize()
     subclasses = SSHProcess.all_subclasses()
     meta = Metadata()
@@ -123,13 +124,13 @@ def main():
         #         data['whois'] = whois_response
 
         if args.http:
-            data = http(data)
+            data = http_protocol(data)
 
         if args.https:
-            data = https(data, date)
+            data = https_protocol(data, date)
 
         if args.ssh:
-            data = ssh()
+            data = ssh_protocol()
 
         output.write(json.dumps(data) + '\n')
 
