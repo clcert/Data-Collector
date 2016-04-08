@@ -21,6 +21,14 @@ class TrendnetCameraTest(unittest.TestCase):
         self.assertEqual(metadata.device.type, 'Camera')
         self.assertEqual(metadata.device.product, 'TV-IP751WC')
 
+    def test_three(self):
+        data = {'header': {'www_authenticate': '"Digest realm=""TV-IP551W"",qop=""auth"", nonce=""7aba7840d1b192d4cc74598e3d5ca223"""'}}
+        metadata = TrendnetCamera().process(data, Metadata())
+
+        self.assertEqual(metadata.device.manufacturer, 'TRENDnet')
+        self.assertEqual(metadata.device.type, 'Camera')
+        self.assertEqual(metadata.device.product, 'TV-IP551W')
+
 
 if __name__ == '__main__':
     unittest.main()

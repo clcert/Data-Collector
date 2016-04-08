@@ -9,7 +9,7 @@ class TrendnetCamera(HTTPProcess):
     https://www.trendnet.com/langsp/products/proddetail?prod=225_TV-IP751WIC
     """
 
-    re_expr = re.compile('(tv-ip751wi?c)', re.IGNORECASE)
+    re_expr = re.compile('(tv-ip\d{3}wi?c?)', re.IGNORECASE)
 
     def process(self, data, metadata):
 
