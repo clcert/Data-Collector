@@ -2,5 +2,5 @@ netaddr
 ipwhois
 dnspython
 pyopenssl
-progressbar
+progressbar2
 python-dateutil

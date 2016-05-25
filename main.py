@@ -21,6 +21,7 @@ from ssh.Juniper import Juniper
 from http.header import *
 from ssh.banner import *
 
+
 def argument_parser():
     parser = argparse.ArgumentParser(description='Recollect IP data')
     parser.add_argument('-i', '--input', help='Input file name', required=True)
@@ -29,6 +30,7 @@ def argument_parser():
     parser.add_argument('--date', help='Add the date of scan (input format dd/mm/yyyy)', required=True)
     parser.add_argument('--whois', help='Set whois ip response', action='store_true', required=False)
     parser.add_argument('--dns_reverse', help='Set the machine name', action='store_true', required=False)
+    parser.add_argument('--old_data', help='Parse old data', action='store_true', required=False)
     parser.add_argument('--http', help='Parse http info', action='store_true', required=False)
     parser.add_argument('--https', help='Parse https certificate info and validate this', action='store_true',
                         required=False)
@@ -51,17 +53,20 @@ def parse_date(date_string):
     sys.exit(1)
 
 
-def http_protocol(data):
-    normalized_data = HTTPPreprocessor.parse_headers(http.normalizer.Normalizer(data).normalize())
+def http_protocol(data, old_data):
+    if old_data:
+        data = http.normalizer.Normalizer(data).normalize()
+
+    parsed_data = HTTPPreprocessor.preprocess(data)
     subclasses = HTTPProcess.all_subclasses()
     meta = Metadata()
 
     for sub in subclasses:
-        meta = sub().process(normalized_data, meta)
+        meta.merge(sub().process(parsed_data, Metadata()))
     if not meta.is_empty():
-        normalized_data['metadata'] = meta.to_dict()
+        parsed_data['metadata'] = meta.to_dict()
 
-    return normalized_data
+    return parsed_data
 
 
 def https_protocol(data, date):
@@ -144,13 +149,16 @@ def main():
             data = ip_whois(data)
 
         if args.http:
-            data = http_protocol(data)
+            data = http_protocol(data, args.old_data)
 
         if args.https:
             data = https_protocol(data, date)
 
         if args.ssh:
             data = ssh_protocol()
+
+        data['date'] = date.strftime("%Y-%m-%d")
+        data['schema_version'] = '1.0'
 
         output.write(json.dumps(data) + '\n')
 
