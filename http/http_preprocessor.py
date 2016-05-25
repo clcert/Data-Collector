@@ -31,7 +31,7 @@ class HTTPPreprocessor(object):
                     value)
 
             data.pop('header', None)
-            data['header'] = parsed_header
+            data['parse_header'] = parsed_header
 
         return data
 
