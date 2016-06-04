@@ -4,6 +4,7 @@ from ssh.ssh_process import SSHProcess
 class Arris(SSHProcess):
     """
     http://www.surfboard.com/
+    http://www.arris.com/
     """
 
     search = "arris"
@@ -14,7 +15,6 @@ class Arris(SSHProcess):
         if banner:
             if banner.lower().find(self.search) != -1:
                 metadata.device.manufacturer = "Arris"
-                metadata.device.type = "Cable Modem"
 
         return metadata
 

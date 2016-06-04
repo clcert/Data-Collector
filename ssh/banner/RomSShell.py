@@ -3,12 +3,12 @@ import re
 from ssh.ssh_process import SSHProcess
 
 
-class Dropbear(SSHProcess):
+class RomSShell(SSHProcess):
     """
-    https://matt.ucc.asn.au/dropbear/dropbear.html
+    https://www.allegrosoft.com/embedded-ssh-client-server-ae
     """
 
-    re_expr = re.compile("^ssh-\d\.\d.dropbear_(?P<version>[\d\.]+)", re.IGNORECASE)
+    re_expr = re.compile('ssh-\d\.\d-romsshell_(?P<version>[\d\.]+)', re.IGNORECASE)
 
     def process(self, data, metadata):
         banner = data.get('banner')
@@ -17,7 +17,8 @@ class Dropbear(SSHProcess):
             match_obj = self.re_expr.search(banner)
 
             if match_obj:
-                metadata.service.product = "Dropbear"
+                metadata.service.product = "RomSShell"
+                metadata.service.manufacturer = "Allegro"
                 metadata.service.version = match_obj.group('version')
 
         return metadata
