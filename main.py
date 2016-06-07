@@ -63,6 +63,7 @@ def http_protocol(data, old_data):
 
     for sub in subclasses:
         meta.merge(sub().process(parsed_data, Metadata()))
+
     if not meta.is_empty():
         parsed_data['metadata'] = meta.to_dict()
 

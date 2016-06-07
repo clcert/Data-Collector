@@ -5,7 +5,7 @@ class HTTPProcess(object):
 
     @staticmethod
     def get_header_field(data, field):
-        header = data.get('header')
+        header = data.get('parse_header')
 
         if header:
             return header.get(field)
