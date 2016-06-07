@@ -4,10 +4,14 @@ import re
 class HTTPPreprocessor(object):
     @staticmethod
     def preprocess(data):
-        data['raw_header'] = data.get('header')
-        data['raw_index'] = data.get('index')
-        data.pop('header', None)
-        data.pop('index', None)
+
+        if 'header' in data:
+            data['raw_header'] = data.get('header')
+            data.pop('header', None)
+
+        if 'index' in data:
+            data['raw_index'] = data.get('index')
+            data.pop('index', None)
 
         data = HTTPPreprocessor.parse_headers(data)
         data = HTTPPreprocessor.parse_index(data)
