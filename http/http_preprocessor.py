@@ -1,4 +1,4 @@
-import re
+from http.javascript import Javascript
 
 
 class HTTPPreprocessor(object):
@@ -45,17 +45,9 @@ class HTTPPreprocessor(object):
         if index is None:
             return data
 
-        # scripts
-        expr = '.*?<script\s?[.,\s]*?(type\s*?=\s*?\"\s*?.*?javascript.*?\s*?\"\s*?)?[.,\s]*?src\s*?=\s*?\"\s*?(?P<script>.*?)\s*?\"'
-        re_expr = re.compile(expr, re.IGNORECASE)
-
-        match = re_expr.findall(index)
-        if match:
-            script_list = list()
-            for elem in match:
-                if elem[1] != '':
-                    script_list.append(elem[1])
-            data['parse_index'] = {'scripts': script_list}
+        javascript = Javascript().parse(index)
+        if javascript is not None:
+            data['parse_index'] = {'javascripts': javascript}
 
         return data
 

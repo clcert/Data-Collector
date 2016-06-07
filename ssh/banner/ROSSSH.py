@@ -13,8 +13,7 @@ class ROSSSH(SSHProcess):
 
         if banner:
             if banner.lower().find(self.search) != -1:
-                metadata.device.manufacturer = "Mikrotik"
-                metadata.device.os = "RouterOS"
-                metadata.device.type = "Router"
+                metadata.device.os = "Router OS"
+                metadata.device.type = "Router Board"
 
         return metadata

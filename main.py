@@ -95,7 +95,7 @@ def zmap_log(port, date, input):
 
     log.process_log(input)
     log_dict = log.to_dict()
-    log_dict['port'] = port
+    log_dict['port'] = int(port)
     log_dict['date'] = str(date)
 
     return log_dict
