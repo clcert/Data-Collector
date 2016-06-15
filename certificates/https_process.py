@@ -73,15 +73,15 @@ class HTTPSProcess(object):
                 out = e.output
 
             if self.certificate_expired(out):
-                self.data['validate'], self.data['reason'] = False, 'Certificate expired'
+                self.data['validate'], self.data['validation_error'] = False, 'Certificate expired'
             elif self.self_signed(out):
-                self.data['validate'], self.data['reason'] = False, 'Self signed'
+                self.data['validate'], self.data['validation_error'] = False, 'Self signed'
             elif self.certificate_not_valid_yet(out):
-                self.data['validate'], self.data['reason'] = False, 'Not yet valid'
+                self.data['validate'], self.data['validation_error'] = False, 'Not yet valid'
             elif self.certificate_valid_ok(out):
                 self.data['validate'] = True
             else:
-                self.data['validate'], self.data['reason'] = False, 'Other error'
+                self.data['validate'], self.data['validation_error'] = False, 'Other error'
 
     @staticmethod
     def __certificate_entity_data(certificate):

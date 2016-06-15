@@ -32,16 +32,8 @@ class Normalizer(object):
             self.data.pop('cipherSuite', None)
 
         if 'ciphersSuites' in self.data:
-            self.data['test_cipher_suites'] = self.data['ciphersSuites']
+            self.data['supported_cipher_suites'] = self.data['ciphersSuites']
             self.data.pop('ciphersSuites', None)
-
-        if 'tlsProtocol' in self.data:
-            self.data['tls_protocol'] = self.data['tlsProtocol']
-            self.data.pop('tlsProtocol', None)
-
-        if 'tlsProtocol' in self.data:
-            self.data['tls_protocol'] = self.data['tlsProtocol']
-            self.data.pop('tlsProtocol', None)
 
         if 'protocols' in self.data:
             self.data['supported_protocols'] = self.data['protocols']
