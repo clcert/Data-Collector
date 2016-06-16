@@ -71,8 +71,8 @@ def http_protocol(data, old_data):
 
 
 def https_protocol(data, date):
-    normalized_data = certificates.normalizer.Normalizer(data).normalize()
-    return HTTPProcess(normalized_data, date).process()
+    normalized_data = certificates.Normalizer(data).normalize()
+    return certificates.HTTPSProcess(normalized_data, date).process()
 
 
 def ssh_protocol(data):
