@@ -161,7 +161,10 @@ def main():
         data['date'] = date.strftime("%Y-%m-%d")
         data['schema_version'] = '1.0'
 
-        output.write(json.dumps(data) + '\n')
+        try:
+            output.write(json.dumps(data) + '\n')
+        except UnicodeDecodeError:
+            output.write(json.dumps(data, encoding='latin1') + '\n')
 
     progress_bar.finish()
 
