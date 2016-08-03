@@ -51,14 +51,14 @@ class HTTPSProcess(object):
             cert = self.data['chain'][0]['pem_cert'].encode('ascii', 'ignore')
             chain = [i['pem_cert'] for i in self.data['chain'][1:]]
 
-            out_cert = open('cert.crt', 'w')
+            out_cert = open(CERT_NAME, 'w')
             begin, cert, end = cert.split('\n')
 
             out_cert.write(begin + '\n')
             out_cert.write(textwrap.fill(cert, 64))
             out_cert.write('\n' + end)
 
-            out_chain = open('chain.crt', 'w')
+            out_chain = open(CERT_CHAIN, 'w')
 
             for c in chain:
                 begin, cert, end = c.split('\n')
