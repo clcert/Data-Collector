@@ -1,3 +1,5 @@
+import random
+import string
 import textwrap
 import time
 from subprocess import check_output, CalledProcessError
@@ -5,9 +7,13 @@ from subprocess import check_output, CalledProcessError
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
 from dateutil import parser
 
+CERT_NAME = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+CERT_CHAIN = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+
 
 class HTTPSProcess(object):
     def __init__(self, data, date):
+
         self.data = data
         self.timestamp = str(int(time.mktime(date.timetuple())))
 
@@ -65,9 +71,11 @@ class HTTPSProcess(object):
 
             try:
                 if len(chain) == 0:
-                    out = check_output(('openssl verify -attime ' + self.timestamp + ' -CApath /etc/ssl/certs cert.crt').split())
+                    out = check_output(('openssl verify -attime ' + self.timestamp + ' -CApath /etc/ssl/certs ' +
+                                        CERT_NAME).split())
                 else:
-                    out = check_output(('openssl verify -attime ' + self.timestamp + ' -CApath /etc/ssl/certs -untrusted chain.crt cert.crt').split())
+                    out = check_output(('openssl verify -attime ' + self.timestamp +
+                                        ' -CApath /etc/ssl/certs -untrusted ' + CERT_CHAIN + ' ' + CERT_NAME).split())
 
             except CalledProcessError as e:
                 out = e.output
