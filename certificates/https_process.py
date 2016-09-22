@@ -7,8 +7,8 @@ from subprocess import check_output, CalledProcessError
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
 from dateutil import parser
 
-CERT_NAME = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
-CERT_CHAIN = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+CERT_NAME = 'cert_' + ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(5)) + '.crt'
+CERT_CHAIN = 'chain_' + ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(5)) + '.crt'
 
 
 class HTTPSProcess(object):
@@ -137,4 +137,4 @@ class HTTPSProcess(object):
 
     @staticmethod
     def certificate_valid_ok(output):
-        return 'cert.crt: OK' in output
+        return (CERT_NAME + ': OK') in output
