@@ -19,6 +19,7 @@ from progressBar import ProgressBar
 from ssh.ssh_process import SSHProcess
 from ssh.Juniper import Juniper
 from http.header import *
+from http.www_auth import *
 from ssh.banner import *
 
 
